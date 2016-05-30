@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+`itranswarp.js` is a full-featured CMS including blog, wiki, discussion, etc. powered by Nodejs. It's developed by M. Liao, here is the demo in his personal site:
+http://www.liaoxuefeng.com/
+
+# Node.JS on Ubuntu
+Be aware! `apt-get install node` will give you another tool called node. The real node is named `nodejs` in the repository. 
+There is a legacy tool that helps alias your `nodejs` to `node`
+
+`sudo apt-get install nodejs-legacy`
+
+However, in the bad luck case that you did install the wrong node and wish to get rid of the `no such a file` error, please use
+
+`export PATH=$PATH:/usr/bin`
+
+Also, when `nodejs --version` is executed, attention should be raised, since itranswarp.js uses `--harmony` modules, a node version $>0.11.9$ is required. 
+
+You can either find another apt repository or use `npm` to install the latest node.
+
+`sudo npm cache clean -f`
+
+`sudo npm install -g n`
+
+`sudo n 0.12.4`
+# Initialize a database
+Copy `config_default.js` as `config_development.js` and modify it as you need. Then use `node schema` to generate `schema.sql`. You are only one step away from it! Use `mysql -u root -p < schema.sql` and then `node --harmony app.js`, go to `http://localhost:2015`. WOW!
+#admin
+TBC
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p><code>itranswarp.js</code> is a full-featured CMS including blog, wiki, discussion, etc. powered by Nodejs. It's developed by M. Liao, here is the demo in his personal site:
+http://www.liaoxuefeng.com/</p>
+
+<h1 id="nodejsonubuntu">Node.JS on Ubuntu</h1>
+
+<p>Be aware! <code>apt-get install node</code> will give you another tool called node. The real node is named <code>nodejs</code> in the repository. 
+There is a legacy tool that helps alias your <code>nodejs</code> to <code>node</code></p>
+
+<p><code>sudo apt-get install nodejs-legacy</code></p>
+
+<p>However, in the bad luck case that you did install the wrong node and wish to get rid of the <code>no such a file</code> error, please use</p>
+
+<p><code>export PATH=$PATH:/usr/bin</code></p>
+
+<p>Also, when <code>nodejs --version</code> is executed, attention should be raised, since itranswarp.js uses <code>--harmony</code> modules, a node version <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-5-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mo>&amp;gt;</mo><mn>0.11.9</mn></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-13" role="math" style="width: 4.603em; display: inline-block;"><span style="display: inline-block; position: relative; width: 3.652em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.502em 1003.6em 2.502em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-14"><span class="mo" id="MathJax-Span-15" style="font-family: MathJax_Main;">&gt;</span><span class="mn" id="MathJax-Span-16" style="font-family: MathJax_Main; padding-left: 0.302em;">0.11.9</span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.122em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.003em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>&gt;</mo><mn>0.11.9</mn></math></span></span><script type="math/tex" id="MathJax-Element-5">>0.11.9</script> is required. </p>
+
+<p>You can either find another apt repository or use <code>npm</code> to install the latest node.</p>
+
+<p><code>sudo npm cache clean -f</code></p>
+
+<p><code>sudo npm install -g n</code></p>
+
+<p><code>sudo n 0.12.4</code></p>
+
+<h1 id="initializeadatabase">Initialize a database</h1>
+
+<p>Copy <code>config_default.js</code> as <code>config_development.js</code> and modify it as you need. Then use <code>node schema</code> to generate <code>schema.sql</code>. You are only one step away from it! Use <code>mysql -u root -p &lt; schema.sql</code> and then <code>node --harmony app.js</code>, go to <code>http://localhost:2015</code>. WOW!</p>
+
+<h1 id="admin">admin</h1>
+
+<p>TBC</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "itranswarp.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
