@@ -1,0 +1,429 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+`scuff-EM` is a `Boundary Element Method` (`BEM`) electromagnetic solver developed by [Homer Reid]. The huge advantage of using BEM rather than FEM is that one does not need to mesh the entire solver space, but only mesh the surface of the objects. 
+
+It's not limited to electrostatic problems like K. Singer's Essential Numerical Toolkit (which is another BEM solver widely used in quantum information field), it considers the phase change of the wave supporting the simulation of an incident wave (which can be customized!). Moreover, it models the fluctuation-induced electromagnetic phenomena such as Casimir Effect and radiative heat transfer. 
+
+# Compile it on Ubuntu
+You can download from the github repository by
+```
+git clone https://homerreid@github.com/HomerReid/scuff-em.git
+cd scuff-em
+```
+Then use the `autogen` 
+```
+sh autogen.sh --prefix=/path/to/scuff-em-installation-directory
+make install
+```
+It may require `libtool`, `liblapack-dev`, `libblas-dev`, `libhdf5-serial-dev`, 
+`python-dev` packages. If you're uncertain, I recommend you try `auto-apt` tool to find and install the missing packages automatically, here is how
+```
+sudo apt-get install auto-apt
+sudo auto-apt update
+sudo auto-apt updatedb && sudo auto-apt update-local
+sudo auto-apt run ****
+```
+where `***` is the command that you wish to use like `make install`.
+
+Once you finish installing, you should be able to use `scuff-analyze` and other commands. Let's move on.
+# How to Run a Simulation
+There are a few solvers in this program, they are
+
+* `scuff-analyze` - an analyzer for the memory budget. Also used for generating GMSH post-processing file `*.pp`
+
+* `scuff-static` - an electrostatic solver for problems like self- and mutual- capacitances, DC polarizations of conductor and dielectric, electrostatic field.
+
+* `scuff-rf` - a passive RF device modeling tool. Can solve for S-parameters vs. frequency, radiated field patterns, etc. 
+* `scuff-neq`, `scuff-cas3d`, `scuff-caspol` - for fluctuation-induced interactions.
+
+* `scuff-scatter` - a very general solver for field scattered in space. 
+
+* `scuff-transmission` - a solver for plane wave transmission in 2D geometries like thin films, nanoparticle arrays, etc. 
+
+# Geometry Files
+scuff-em uses `.scuffgeo` to specify the geometry. In this file, one can define a material and applies it to a geometry. The geometry can be a result (meshed surface geometry) from `GMSH` (`.msh` file). An [example] is 
+```
+MATERIAL SILICON
+  epsf = 1.035;      # \epsilon_infinity
+  eps0 = 11.87;      # \epsilon_0 
+  wp = 6.6e15;       # \plasmon frequency
+  Eps(w) = epsf + (eps0-epsf)/(1-(w/wp)^2);
+ENDMATERIAL
+
+OBJECT SiliconSphere 
+  MESHFILE Sphere_R1P0.msh
+  MATERIAL Silicon
+ENDOBJECT 
+
+
+OBJECT InnerSphere 
+  MESHFILE Sphere_R0P5.msh
+  MATERIAL PEC
+ENDOBJECT 
+```
+The material in this case is a frequency dependent one, given by the expression
+
+$Eps(w) = epf + (eps0-epsf)/(1-(w/wp)^2).$
+
+which is written formly as
+
+$\varepsilon(\omega) = \varepsilon _{f} + (\varepsilon _{0}-\varepsilon _f)/(1-(\omega /\omega _p)^2).$
+
+More details about [material] can be found in the doc.
+
+Additionally, you can perform [transformation] on the geometry loaded by `.trans` file. 
+#Command Line
+This finally comes to the executation of a simulation. Since you have got the `.scuffgeo`, you cn simply run `scuff-electrostatic --geometry *.scuffgeo` to perform an electrostatic evaluation. 
+
+There is some advanced features regarding executing a simulation. There are more arguments like `--Omega` which specifies the freqeuncy for RF, scatter, and other simulations. Insread of using `scuff-rf --geometry *.scuffgeo --Omega 10` you can use an argument file, for example, here is a text file called `scatter.args` 
+```
+    geometry SiCSphere.scuffgeo
+    OmegaFile OmegaValues.dat
+    PFTFile SiCSphere.PFT
+    Cache Sphere.cache
+    pwDirection 0 0 1
+    pwPolarization 1 0 0
+```
+Simply use `scuff-rf <scatter.args` to do your simulation. Writing a script to optimize your simulation is also possible by citing such command.
+
+Let's take a look into the arguments above,
+
+* `geometry *.scuffgeo` - geometry and material definitions
+
+* `Oemga 1.0` - angular frequency in unit of $c/1\mu$m$=3\times 10^{14}$rad/sec.
+
+* `OmegaFile *.dat` -specifies the file with `Omega` frequencies, one per line
+
+* `PFTFile *.PFT` - power, force, and torque (PFT) data. It's the output absorbed and scattered power, force(due to radiation pressure), and torque for all objects at the frequencies you specified. similar options are `EMTPFTFile` (energy-momentum-transfer and PFT), `OPFTFile`, `DSIPFTFile`.
+
+* `Cache *.cache` -output [cache file] for the geometric data, cache is a post processed geometry independent of material or frequency, everytime you run the simulation, the program will look for the cache file, if it exists, the program shall use it no matter what. So when you remesh your geometry please do delete your old cache file. If the cache was not there, the program will compute and save the cache. 
+
+* `pwDirection 0 0 0` and `pwPolarization 0 0 0` -vectors of the direction and polarization of the incident field. 
+#SCUFF-RF
+For an ion trap simulation, we need to define the ports to feed-in the wave. There are `1) incident wave`, `2) circuit feed of RF source`.
+
+The incident wave was shown in the above using `pwDirection 0 0 1` and
+    `pwPolarization 1 0 0` in arguments. More details can be found here on the [incident field] documents
+
+Now an example on the `2)`. To specify a port, you can either specify the coordinate, or use the surface ID.
+
+The coordinate method is recommended because it does not need to be updated with a mesh update. Simply specify the polygon vertices. Units should be by default in $\mu$m
+```
+ PORT 
+       POBJECT LowerSphere
+       PPOLYGON -1 -1  0.98768834 1 -1 0.98768834 1 1 0.98768834 -1 1 0.98768834
+
+       MOBJECT UpperSphere
+       MPOLYGON -1 -1 2.01231166  1 -1 2.01231166 1 1 2.01231166 -1 1 2.01231166
+ ENDPORT
+```
+
+The surfaceID method uses the ID in the pp file. First write the pp file by
+```
+scuff-analyze --meshfile CoilAntenna.msh ---WriteGMSHFiles --WriteGMSHLabels
+gmsh CoilAntenna.pp
+```
+then you should get the post processing geometry in your gmsh, pick the IDs that you wish to use as a port and write to `RF.port`
+```
+ PORT
+     PEDGES ID1 ID2 ID3
+     MEDGES ID4 ID5
+ ENDPORT
+```
+Alternatively you can specify the IDs before post processing by pointing out the object in the geometry. Please refer to the [RF] file memo. 
+
+To compute S and Z parameters, specify the frequency `--frequency *`, use `--sparameters` and `-zparameters` in the arguments. The frequency is always in GHz. 
+```
+scuff-rf --geometry Antenna.rwggeo --portfile CoilAntenna.ports --frequency 0.297 --sparameters --zparameters
+```
+
+To compute the radiation field, you need to specify the input currents of your ports. From the S and Z parameters above (either will work), you can simulate the circuitry in software like `Qucs`, Schematics` from `Advanced Design System` to solve for the current. With the result, you can form a file called `iontrap.portcurrents` with the following format
+```
+f Re(I1) Im(I1) Re(I2) Im(I2) ...
+```
+where `f` is the frequency in GHz, `I1` is the current in Amperes.
+
+Also you need to tell the solver at what point are you intrested, EPFile (`evaluation point` file) will do the trick, it's a text file with `x y z` of your point, one point per line.
+
+Run the simulation using `scuff-rf --geometry Antenna.rwggeo --portfile CoilAntenna.ports --portcurrentfile CoilAntenna.portcurrents --epfile EPFile`. 
+The solver will give you a `.fields` file. it's formatted by
+```
+x y z Re(Ex) Im(Ex) Re(Ey) Im(Ey) Re(Ez) Im(Ez) Re(Hx) Im(Hx)  Re(Hy) Im(Hy) Re(Hz) Im(Hz)
+```
+units are `V/mm` and `A/mm`.
+
+There are more details regarding the command lines which shall be shown later in this blog.
+
+
+[Homer Reid]:<https://github.com/HomerReid/scuff-em>
+[example]:<http://homerreid.github.io/scuff-em-documentation/reference/Geometries/>
+[material]:<http://homerreid.github.io/scuff-em-documentation/reference/Materials/>
+[transformation]:<http://homerreid.github.io/scuff-em-documentation/reference/Transformations/>
+[cache file]:<http://homerreid.dyndns.org/scuff-em/reference/scuffEMMisc.shtml#Caching>
+[RF]:<http://homerreid.dyndns.org/scuff-EM/scuff-RF/scuffRFFiles.shtml>
+[incident field]:<http://homerreid.github.io/scuff-em-documentation/reference/IncidentFields/>
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p><code>scuff-EM</code> is a <code>Boundary Element Method</code> (<code>BEM</code>) electromagnetic solver developed by <a href="https://github.com/HomerReid/scuff-em">Homer Reid</a>. The huge advantage of using BEM rather than FEM is that one does not need to mesh the entire solver space, but only mesh the surface of the objects. </p>
+
+<p>It's not limited to electrostatic problems like K. Singer's Essential Numerical Toolkit (which is another BEM solver widely used in quantum information field), it considers the phase change of the wave supporting the simulation of an incident wave (which can be customized!). Moreover, it models the fluctuation-induced electromagnetic phenomena such as Casimir Effect and radiative heat transfer. </p>
+
+<h1 id="compileitonubuntu">Compile it on Ubuntu</h1>
+
+<p>You can download from the github repository by</p>
+
+<pre><code>git clone https://homerreid@github.com/HomerReid/scuff-em.git
+cd scuff-em
+</code></pre>
+
+<p>Then use the <code>autogen</code> </p>
+
+<pre><code>sh autogen.sh --prefix=/path/to/scuff-em-installation-directory
+make install
+</code></pre>
+
+<p>It may require <code>libtool</code>, <code>liblapack-dev</code>, <code>libblas-dev</code>, <code>libhdf5-serial-dev</code>, 
+<code>python-dev</code> packages. If you're uncertain, I recommend you try <code>auto-apt</code> tool to find and install the missing packages automatically, here is how</p>
+
+<pre><code>sudo apt-get install auto-apt
+sudo auto-apt update
+sudo auto-apt updatedb &amp;&amp; sudo auto-apt update-local
+sudo auto-apt run ****
+</code></pre>
+
+<p>where <code>***</code> is the command that you wish to use like <code>make install</code>.</p>
+
+<p>Once you finish installing, you should be able to use <code>scuff-analyze</code> and other commands. Let's move on.</p>
+
+<h1 id="howtorunasimulation">How to Run a Simulation</h1>
+
+<p>There are a few solvers in this program, they are</p>
+
+<ul>
+<li><p><code>scuff-analyze</code> - an analyzer for the memory budget. Also used for generating GMSH post-processing file <code>*.pp</code></p></li>
+<li><p><code>scuff-static</code> - an electrostatic solver for problems like self- and mutual- capacitances, DC polarizations of conductor and dielectric, electrostatic field.</p></li>
+<li><p><code>scuff-rf</code> - a passive RF device modeling tool. Can solve for S-parameters vs. frequency, radiated field patterns, etc. </p></li>
+<li><p><code>scuff-neq</code>, <code>scuff-cas3d</code>, <code>scuff-caspol</code> - for fluctuation-induced interactions.</p></li>
+<li><p><code>scuff-scatter</code> - a very general solver for field scattered in space. </p></li>
+<li><p><code>scuff-transmission</code> - a solver for plane wave transmission in 2D geometries like thin films, nanoparticle arrays, etc. </p></li>
+</ul>
+
+<h1 id="geometryfiles">Geometry Files</h1>
+
+<p>scuff-em uses <code>.scuffgeo</code> to specify the geometry. In this file, one can define a material and applies it to a geometry. The geometry can be a result (meshed surface geometry) from <code>GMSH</code> (<code>.msh</code> file). An <a href="http://homerreid.github.io/scuff-em-documentation/reference/Geometries/">example</a> is </p>
+
+<pre><code>MATERIAL SILICON
+  epsf = 1.035;      # \epsilon_infinity
+  eps0 = 11.87;      # \epsilon_0 
+  wp = 6.6e15;       # \plasmon frequency
+  Eps(w) = epsf + (eps0-epsf)/(1-(w/wp)^2);
+ENDMATERIAL
+
+OBJECT SiliconSphere 
+  MESHFILE Sphere_R1P0.msh
+  MATERIAL Silicon
+ENDOBJECT 
+
+
+OBJECT InnerSphere 
+  MESHFILE Sphere_R0P5.msh
+  MATERIAL PEC
+ENDOBJECT 
+</code></pre>
+
+<p>The material in this case is a frequency dependent one, given by the expression</p>
+
+<p><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-6-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>E</mi><mi>p</mi><mi>s</mi><mo stretchy=&quot;false&quot;>(</mo><mi>w</mi><mo stretchy=&quot;false&quot;>)</mo><mo>=</mo><mi>e</mi><mi>p</mi><mi>f</mi><mo>+</mo><mo stretchy=&quot;false&quot;>(</mo><mi>e</mi><mi>p</mi><mi>s</mi><mn>0</mn><mo>&amp;#x2212;</mo><mi>e</mi><mi>p</mi><mi>s</mi><mi>f</mi><mo stretchy=&quot;false&quot;>)</mo><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mo stretchy=&quot;false&quot;>(</mo><mn>1</mn><mo>&amp;#x2212;</mo><mo stretchy=&quot;false&quot;>(</mo><mi>w</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mi>w</mi><mi>p</mi><msup><mo stretchy=&quot;false&quot;>)</mo><mn>2</mn></msup><mo stretchy=&quot;false&quot;>)</mo><mo>.</mo></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-107" role="math" style="width: 25.102em; display: inline-block;"><span style="display: inline-block; position: relative; width: 20.053em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.302em 1019.95em 2.702em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-108"><span class="mi" id="MathJax-Span-109" style="font-family: MathJax_Math-italic;">E<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.053em;"></span></span><span class="mi" id="MathJax-Span-110" style="font-family: MathJax_Math-italic;">p</span><span class="mi" id="MathJax-Span-111" style="font-family: MathJax_Math-italic;">s</span><span class="mo" id="MathJax-Span-112" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-113" style="font-family: MathJax_Math-italic;">w</span><span class="mo" id="MathJax-Span-114" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-115" style="font-family: MathJax_Main; padding-left: 0.302em;">=</span><span class="mi" id="MathJax-Span-116" style="font-family: MathJax_Math-italic; padding-left: 0.302em;">e</span><span class="mi" id="MathJax-Span-117" style="font-family: MathJax_Math-italic;">p</span><span class="mi" id="MathJax-Span-118" style="font-family: MathJax_Math-italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.053em;"></span></span><span class="mo" id="MathJax-Span-119" style="font-family: MathJax_Main; padding-left: 0.202em;">+</span><span class="mo" id="MathJax-Span-120" style="font-family: MathJax_Main; padding-left: 0.202em;">(</span><span class="mi" id="MathJax-Span-121" style="font-family: MathJax_Math-italic;">e</span><span class="mi" id="MathJax-Span-122" style="font-family: MathJax_Math-italic;">p</span><span class="mi" id="MathJax-Span-123" style="font-family: MathJax_Math-italic;">s</span><span class="mn" id="MathJax-Span-124" style="font-family: MathJax_Main;">0</span><span class="mo" id="MathJax-Span-125" style="font-family: MathJax_Main; padding-left: 0.202em;">−</span><span class="mi" id="MathJax-Span-126" style="font-family: MathJax_Math-italic; padding-left: 0.202em;">e</span><span class="mi" id="MathJax-Span-127" style="font-family: MathJax_Math-italic;">p</span><span class="mi" id="MathJax-Span-128" style="font-family: MathJax_Math-italic;">s</span><span class="mi" id="MathJax-Span-129" style="font-family: MathJax_Math-italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.053em;"></span></span><span class="mo" id="MathJax-Span-130" style="font-family: MathJax_Main;">)</span><span class="texatom" id="MathJax-Span-131"><span class="mrow" id="MathJax-Span-132"><span class="mo" id="MathJax-Span-133" style="font-family: MathJax_Main;">/</span></span></span><span class="mo" id="MathJax-Span-134" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-135" style="font-family: MathJax_Main;">1</span><span class="mo" id="MathJax-Span-136" style="font-family: MathJax_Main; padding-left: 0.202em;">−</span><span class="mo" id="MathJax-Span-137" style="font-family: MathJax_Main; padding-left: 0.202em;">(</span><span class="mi" id="MathJax-Span-138" style="font-family: MathJax_Math-italic;">w</span><span class="texatom" id="MathJax-Span-139"><span class="mrow" id="MathJax-Span-140"><span class="mo" id="MathJax-Span-141" style="font-family: MathJax_Main;">/</span></span></span><span class="mi" id="MathJax-Span-142" style="font-family: MathJax_Math-italic;">w</span><span class="mi" id="MathJax-Span-143" style="font-family: MathJax_Math-italic;">p</span><span class="msubsup" id="MathJax-Span-144"><span style="display: inline-block; position: relative; width: 0.802em; height: 0px;"><span style="position: absolute; clip: rect(3.103em 1000.3em 4.402em -999.998em); top: -3.998em; left: 0.003em;"><span class="mo" id="MathJax-Span-145" style="font-family: MathJax_Main;">)</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -4.348em; left: 0.403em;"><span class="mn" id="MathJax-Span-146" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="mo" id="MathJax-Span-147" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-148" style="font-family: MathJax_Main;">.</span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.372em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.503em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>E</mi><mi>p</mi><mi>s</mi><mo stretchy="false">(</mo><mi>w</mi><mo stretchy="false">)</mo><mo>=</mo><mi>e</mi><mi>p</mi><mi>f</mi><mo>+</mo><mo stretchy="false">(</mo><mi>e</mi><mi>p</mi><mi>s</mi><mn>0</mn><mo>−</mo><mi>e</mi><mi>p</mi><mi>s</mi><mi>f</mi><mo stretchy="false">)</mo><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mo stretchy="false">(</mo><mi>w</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mi>w</mi><mi>p</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo stretchy="false">)</mo><mo>.</mo></math></span></span><script type="math/tex" id="MathJax-Element-6">Eps(w) = epf + (eps0-epsf)/(1-(w/wp)^2).</script></p>
+
+<p>which is written formly as</p>
+
+<p><span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-7-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>&amp;#x03B5;</mi><mo stretchy=&quot;false&quot;>(</mo><mi>&amp;#x03C9;</mi><mo stretchy=&quot;false&quot;>)</mo><mo>=</mo><msub><mi>&amp;#x03B5;</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mi>f</mi></mrow></msub><mo>+</mo><mo stretchy=&quot;false&quot;>(</mo><msub><mi>&amp;#x03B5;</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mn>0</mn></mrow></msub><mo>&amp;#x2212;</mo><msub><mi>&amp;#x03B5;</mi><mi>f</mi></msub><mo stretchy=&quot;false&quot;>)</mo><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mo stretchy=&quot;false&quot;>(</mo><mn>1</mn><mo>&amp;#x2212;</mo><mo stretchy=&quot;false&quot;>(</mo><mi>&amp;#x03C9;</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><msub><mi>&amp;#x03C9;</mi><mi>p</mi></msub><msup><mo stretchy=&quot;false&quot;>)</mo><mn>2</mn></msup><mo stretchy=&quot;false&quot;>)</mo><mo>.</mo></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-149" role="math" style="width: 19.753em; display: inline-block;"><span style="display: inline-block; position: relative; width: 15.803em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.302em 1015.7em 2.752em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-150"><span class="mi" id="MathJax-Span-151" style="font-family: MathJax_Math-italic;">ε</span><span class="mo" id="MathJax-Span-152" style="font-family: MathJax_Main;">(</span><span class="mi" id="MathJax-Span-153" style="font-family: MathJax_Math-italic;">ω</span><span class="mo" id="MathJax-Span-154" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-155" style="font-family: MathJax_Main; padding-left: 0.302em;">=</span><span class="msubsup" id="MathJax-Span-156" style="padding-left: 0.302em;"><span style="display: inline-block; position: relative; width: 0.953em; height: 0px;"><span style="position: absolute; clip: rect(3.402em 1000.45em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mi" id="MathJax-Span-157" style="font-family: MathJax_Math-italic;">ε</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -3.848em; left: 0.453em;"><span class="texatom" id="MathJax-Span-158"><span class="mrow" id="MathJax-Span-159"><span class="mi" id="MathJax-Span-160" style="font-size: 70.7%; font-family: MathJax_Math-italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.053em;"></span></span></span></span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="mo" id="MathJax-Span-161" style="font-family: MathJax_Main; padding-left: 0.202em;">+</span><span class="mo" id="MathJax-Span-162" style="font-family: MathJax_Main; padding-left: 0.202em;">(</span><span class="msubsup" id="MathJax-Span-163"><span style="display: inline-block; position: relative; width: 0.903em; height: 0px;"><span style="position: absolute; clip: rect(3.402em 1000.45em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mi" id="MathJax-Span-164" style="font-family: MathJax_Math-italic;">ε</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -3.848em; left: 0.453em;"><span class="texatom" id="MathJax-Span-165"><span class="mrow" id="MathJax-Span-166"><span class="mn" id="MathJax-Span-167" style="font-size: 70.7%; font-family: MathJax_Main;">0</span></span></span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="mo" id="MathJax-Span-168" style="font-family: MathJax_Main; padding-left: 0.202em;">−</span><span class="msubsup" id="MathJax-Span-169" style="padding-left: 0.202em;"><span style="display: inline-block; position: relative; width: 0.953em; height: 0px;"><span style="position: absolute; clip: rect(3.402em 1000.45em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mi" id="MathJax-Span-170" style="font-family: MathJax_Math-italic;">ε</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -3.848em; left: 0.453em;"><span class="mi" id="MathJax-Span-171" style="font-size: 70.7%; font-family: MathJax_Math-italic;">f<span style="display: inline-block; overflow: hidden; height: 1px; width: 0.053em;"></span></span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="mo" id="MathJax-Span-172" style="font-family: MathJax_Main;">)</span><span class="texatom" id="MathJax-Span-173"><span class="mrow" id="MathJax-Span-174"><span class="mo" id="MathJax-Span-175" style="font-family: MathJax_Main;">/</span></span></span><span class="mo" id="MathJax-Span-176" style="font-family: MathJax_Main;">(</span><span class="mn" id="MathJax-Span-177" style="font-family: MathJax_Main;">1</span><span class="mo" id="MathJax-Span-178" style="font-family: MathJax_Main; padding-left: 0.202em;">−</span><span class="mo" id="MathJax-Span-179" style="font-family: MathJax_Main; padding-left: 0.202em;">(</span><span class="mi" id="MathJax-Span-180" style="font-family: MathJax_Math-italic;">ω</span><span class="texatom" id="MathJax-Span-181"><span class="mrow" id="MathJax-Span-182"><span class="mo" id="MathJax-Span-183" style="font-family: MathJax_Main;">/</span></span></span><span class="msubsup" id="MathJax-Span-184"><span style="display: inline-block; position: relative; width: 1.052em; height: 0px;"><span style="position: absolute; clip: rect(3.402em 1000.6em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mi" id="MathJax-Span-185" style="font-family: MathJax_Math-italic;">ω</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -3.848em; left: 0.603em;"><span class="mi" id="MathJax-Span-186" style="font-size: 70.7%; font-family: MathJax_Math-italic;">p</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="msubsup" id="MathJax-Span-187"><span style="display: inline-block; position: relative; width: 0.802em; height: 0px;"><span style="position: absolute; clip: rect(3.103em 1000.3em 4.402em -999.998em); top: -3.998em; left: 0.003em;"><span class="mo" id="MathJax-Span-188" style="font-family: MathJax_Main;">)</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -4.348em; left: 0.403em;"><span class="mn" id="MathJax-Span-189" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span><span class="mo" id="MathJax-Span-190" style="font-family: MathJax_Main;">)</span><span class="mo" id="MathJax-Span-191" style="font-family: MathJax_Main;">.</span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.434em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.566em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>ε</mi><mo stretchy="false">(</mo><mi>ω</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>ε</mi><mrow class="MJX-TeXAtom-ORD"><mi>f</mi></mrow></msub><mo>+</mo><mo stretchy="false">(</mo><msub><mi>ε</mi><mrow class="MJX-TeXAtom-ORD"><mn>0</mn></mrow></msub><mo>−</mo><msub><mi>ε</mi><mi>f</mi></msub><mo stretchy="false">)</mo><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mo stretchy="false">(</mo><mi>ω</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><msub><mi>ω</mi><mi>p</mi></msub><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo stretchy="false">)</mo><mo>.</mo></math></span></span><script type="math/tex" id="MathJax-Element-7">\varepsilon(\omega) = \varepsilon _{f} + (\varepsilon _{0}-\varepsilon _f)/(1-(\omega /\omega _p)^2).</script></p>
+
+<p>More details about <a href="http://homerreid.github.io/scuff-em-documentation/reference/Materials/">material</a> can be found in the doc.</p>
+
+<p>Additionally, you can perform <a href="http://homerreid.github.io/scuff-em-documentation/reference/Transformations/">transformation</a> on the geometry loaded by <code>.trans</code> file. </p>
+
+<h1 id="commandline">Command Line</h1>
+
+<p>This finally comes to the executation of a simulation. Since you have got the <code>.scuffgeo</code>, you cn simply run <code>scuff-electrostatic --geometry *.scuffgeo</code> to perform an electrostatic evaluation. </p>
+
+<p>There is some advanced features regarding executing a simulation. There are more arguments like <code>--Omega</code> which specifies the freqeuncy for RF, scatter, and other simulations. Insread of using <code>scuff-rf --geometry *.scuffgeo --Omega 10</code> you can use an argument file, for example, here is a text file called <code>scatter.args</code> </p>
+
+<pre><code>    geometry SiCSphere.scuffgeo
+    OmegaFile OmegaValues.dat
+    PFTFile SiCSphere.PFT
+    Cache Sphere.cache
+    pwDirection 0 0 1
+    pwPolarization 1 0 0
+</code></pre>
+
+<p>Simply use <code>scuff-rf &lt;scatter.args</code> to do your simulation. Writing a script to optimize your simulation is also possible by citing such command.</p>
+
+<p>Let's take a look into the arguments above,</p>
+
+<ul>
+<li><p><code>geometry *.scuffgeo</code> - geometry and material definitions</p></li>
+<li><p><code>Oemga 1.0</code> - angular frequency in unit of <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-8-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>c</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mn>1</mn><mi>&amp;#x03BC;</mi></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-192" role="math" style="width: 2.603em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.052em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.403em 1002.05em 2.702em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-193"><span class="mi" id="MathJax-Span-194" style="font-family: MathJax_Math-italic;">c</span><span class="texatom" id="MathJax-Span-195"><span class="mrow" id="MathJax-Span-196"><span class="mo" id="MathJax-Span-197" style="font-family: MathJax_Main;">/</span></span></span><span class="mn" id="MathJax-Span-198" style="font-family: MathJax_Main;">1</span><span class="mi" id="MathJax-Span-199" style="font-family: MathJax_Math-italic;">μ</span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.372em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.378em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>c</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mn>1</mn><mi>μ</mi></math></span></span><script type="math/tex" id="MathJax-Element-8">c/1\mu</script>m<span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-9-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mo>=</mo><mn>3</mn><mo>&amp;#x00D7;</mo><msup><mn>10</mn><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mn>14</mn></mrow></msup></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-200" role="math" style="width: 5.752em; display: inline-block;"><span style="display: inline-block; position: relative; width: 4.603em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.302em 1004.6em 2.452em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-201"><span class="mo" id="MathJax-Span-202" style="font-family: MathJax_Main;">=</span><span class="mn" id="MathJax-Span-203" style="font-family: MathJax_Main; padding-left: 0.302em;">3</span><span class="mo" id="MathJax-Span-204" style="font-family: MathJax_Main; padding-left: 0.202em;">×</span><span class="msubsup" id="MathJax-Span-205" style="padding-left: 0.202em;"><span style="display: inline-block; position: relative; width: 1.802em; height: 0px;"><span style="position: absolute; clip: rect(3.202em 1000.95em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mn" id="MathJax-Span-206" style="font-family: MathJax_Main;">10</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -4.397em; left: 1.002em;"><span class="texatom" id="MathJax-Span-207"><span class="mrow" id="MathJax-Span-208"><span class="mn" id="MathJax-Span-209" style="font-size: 70.7%; font-family: MathJax_Main;">14</span></span></span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.253em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>=</mo><mn>3</mn><mo>×</mo><msup><mn>10</mn><mrow class="MJX-TeXAtom-ORD"><mn>14</mn></mrow></msup></math></span></span><script type="math/tex" id="MathJax-Element-9">=3\times 10^{14}</script>rad/sec.</p></li>
+<li><p><code>OmegaFile *.dat</code> -specifies the file with <code>Omega</code> frequencies, one per line</p></li>
+<li><p><code>PFTFile *.PFT</code> - power, force, and torque (PFT) data. It's the output absorbed and scattered power, force(due to radiation pressure), and torque for all objects at the frequencies you specified. similar options are <code>EMTPFTFile</code> (energy-momentum-transfer and PFT), <code>OPFTFile</code>, <code>DSIPFTFile</code>.</p></li>
+<li><p><code>Cache *.cache</code> -output <a href="http://homerreid.dyndns.org/scuff-em/reference/scuffEMMisc.shtml#Caching">cache file</a> for the geometric data, cache is a post processed geometry independent of material or frequency, everytime you run the simulation, the program will look for the cache file, if it exists, the program shall use it no matter what. So when you remesh your geometry please do delete your old cache file. If the cache was not there, the program will compute and save the cache. </p></li>
+<li><p><code>pwDirection 0 0 0</code> and <code>pwPolarization 0 0 0</code> -vectors of the direction and polarization of the incident field. </p></li>
+</ul>
+
+<h1 id="scuffrf">SCUFF-RF</h1>
+
+<p>For an ion trap simulation, we need to define the ports to feed-in the wave. There are <code>1) incident wave</code>, <code>2) circuit feed of RF source</code>.</p>
+
+<p>The incident wave was shown in the above using <code>pwDirection 0 0 1</code> and
+    <code>pwPolarization 1 0 0</code> in arguments. More details can be found here on the <a href="http://homerreid.github.io/scuff-em-documentation/reference/IncidentFields/">incident field</a> documents</p>
+
+<p>Now an example on the <code>2)</code>. To specify a port, you can either specify the coordinate, or use the surface ID.</p>
+
+<p>The coordinate method is recommended because it does not need to be updated with a mesh update. Simply specify the polygon vertices. Units should be by default in <span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-10-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi>&amp;#x03BC;</mi></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-210" role="math" style="width: 0.853em; display: inline-block;"><span style="display: inline-block; position: relative; width: 0.653em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.702em 1000.65em 2.652em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-211"><span class="mi" id="MathJax-Span-212" style="font-family: MathJax_Math-italic;">μ</span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.309em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 0.941em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>μ</mi></math></span></span><script type="math/tex" id="MathJax-Element-10">\mu</script>m</p>
+
+<pre><code> PORT 
+       POBJECT LowerSphere
+       PPOLYGON -1 -1  0.98768834 1 -1 0.98768834 1 1 0.98768834 -1 1 0.98768834
+
+       MOBJECT UpperSphere
+       MPOLYGON -1 -1 2.01231166  1 -1 2.01231166 1 1 2.01231166 -1 1 2.01231166
+ ENDPORT
+</code></pre>
+
+<p>The surfaceID method uses the ID in the pp file. First write the pp file by</p>
+
+<pre><code>scuff-analyze --meshfile CoilAntenna.msh ---WriteGMSHFiles --WriteGMSHLabels
+gmsh CoilAntenna.pp
+</code></pre>
+
+<p>then you should get the post processing geometry in your gmsh, pick the IDs that you wish to use as a port and write to <code>RF.port</code></p>
+
+<pre><code> PORT
+     PEDGES ID1 ID2 ID3
+     MEDGES ID4 ID5
+ ENDPORT
+</code></pre>
+
+<p>Alternatively you can specify the IDs before post processing by pointing out the object in the geometry. Please refer to the <a href="http://homerreid.dyndns.org/scuff-EM/scuff-RF/scuffRFFiles.shtml">RF</a> file memo. </p>
+
+<p>To compute S and Z parameters, specify the frequency <code>--frequency *</code>, use <code>--sparameters</code> and <code>-zparameters</code> in the arguments. The frequency is always in GHz. </p>
+
+<pre><code>scuff-rf --geometry Antenna.rwggeo --portfile CoilAntenna.ports --frequency 0.297 --sparameters --zparameters
+</code></pre>
+
+<p>To compute the radiation field, you need to specify the input currents of your ports. From the S and Z parameters above (either will work), you can simulate the circuitry in software like <code>Qucs</code>, Schematics<code>from</code>Advanced Design System<code>to solve for the current. With the result, you can form a file called</code>iontrap.portcurrents` with the following format</p>
+
+<pre><code>f Re(I1) Im(I1) Re(I2) Im(I2) ...
+</code></pre>
+
+<p>where <code>f</code> is the frequency in GHz, <code>I1</code> is the current in Amperes.</p>
+
+<p>Also you need to tell the solver at what point are you intrested, EPFile (<code>evaluation point</code> file) will do the trick, it's a text file with <code>x y z</code> of your point, one point per line.</p>
+
+<p>Run the simulation using <code>scuff-rf --geometry Antenna.rwggeo --portfile CoilAntenna.ports --portcurrentfile CoilAntenna.portcurrents --epfile EPFile</code>. 
+The solver will give you a <code>.fields</code> file. it's formatted by</p>
+
+<pre><code>x y z Re(Ex) Im(Ex) Re(Ey) Im(Ey) Re(Ez) Im(Ez) Re(Hx) Im(Hx)  Re(Hy) Im(Hy) Re(Hz) Im(Hz)
+</code></pre>
+
+<p>units are <code>V/mm</code> and <code>A/mm</code>.</p>
+
+<p>There are more details regarding the command lines which shall be shown later in this blog.</p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "SCUFF1.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
