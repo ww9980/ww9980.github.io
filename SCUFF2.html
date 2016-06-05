@@ -27,11 +27,15 @@
 <!-- markdown -->
 `NAN` appears when the floating point error happens, a quick check is to execute `export SCUFF_ABORT_ON_FPE=1` ( set a positive flag on `floating-point exception`). 
 
+A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. 
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
 <p><code>NAN</code> appears when the floating point error happens, a quick check is to execute <code>export SCUFF_ABORT_ON_FPE=1</code> ( set a positive flag on <code>floating-point exception</code>). </p>
+
+<p>A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. </p>
 <!-- content end -->
 </div>
 <br>
