@@ -25,7 +25,7 @@
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
-#NAN problem
+#NAN problem and meshing
 `NAN` appears when the floating point error happens, a quick check is to execute `export SCUFF_ABORT_ON_FPE=1` ( set a positive flag on `floating-point exception`). It will cause the program to stop when floating error happens.
 
 A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. 
@@ -38,7 +38,7 @@ export SCUFF_LOGLEVEL="VERBOSE"
 export SCUFF_LOGLEVEL="VERBOSE2"
 ```
 
-There is a 
+There is a mesh tool called `[Neper]`, an open source polycrystal generation and meshing package. By using `-M` mode, the module meshes polycrystals described by tessellation files. By `-M trap.msh`, the mesh of the geometry is further optimized saving a ton of CPU time. 
 #Extended Geometries
 When using extruded geometries, you must use an `extrude` command in the `.geo` file instead of meshing it using `gmsh` beforehand(i.e. using a extruded geometry from a CAD design and gmsh it). It's because of the nature of Green Function requires corresponding vertices on the opposite face.
 
@@ -49,11 +49,12 @@ Also, when CPU time is significantly long, you might want to try
 
 
 [official documents]:<http://homerreid.github.io/scuff-em-documentation/applications/GeneralReference/>
+[neper]:<neper.sourceforge.net>
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<h1 id="nanproblem">NAN problem</h1>
+<h1 id="nanproblemandmeshing">NAN problem and meshing</h1>
 
 <p><code>NAN</code> appears when the floating point error happens, a quick check is to execute <code>export SCUFF_ABORT_ON_FPE=1</code> ( set a positive flag on <code>floating-point exception</code>). It will cause the program to stop when floating error happens.</p>
 
@@ -67,7 +68,7 @@ export SCUFF_LOGLEVEL="VERBOSE"
 export SCUFF_LOGLEVEL="VERBOSE2"
 </code></pre>
 
-<p>There is a </p>
+<p>There is a mesh tool called <code>[Neper]</code>, an open source polycrystal generation and meshing package. By using <code>-M</code> mode, the module meshes polycrystals described by tessellation files. By <code>-M trap.msh</code>, the mesh of the geometry is further optimized saving a ton of CPU time. </p>
 
 <h1 id="extendedgeometries">Extended Geometries</h1>
 
