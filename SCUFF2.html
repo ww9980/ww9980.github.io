@@ -25,17 +25,58 @@
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
-`NAN` appears when the floating point error happens, a quick check is to execute `export SCUFF_ABORT_ON_FPE=1` ( set a positive flag on `floating-point exception`). 
+#NAN problem
+`NAN` appears when the floating point error happens, a quick check is to execute `export SCUFF_ABORT_ON_FPE=1` ( set a positive flag on `floating-point exception`). It will cause the program to stop when floating error happens.
 
 A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. 
 
+Another useful debug technique is to set your log file to a more detailed level. Here are the commands from `none` (no log shown on the screen) to `verbose2`(most detailed)
+```
+export SCUFF_LOGLEVEL="NONE"
+export SCUFF_LOGLEVEL="TERSE"
+export SCUFF_LOGLEVEL="VERBOSE"
+export SCUFF_LOGLEVEL="VERBOSE2"
+```
+
+There is a 
+#Extended Geometries
+When using extruded geometries, you must use an `extrude` command in the `.geo` file instead of meshing it using `gmsh` beforehand(i.e. using a extruded geometry from a CAD design and gmsh it). It's because of the nature of Green Function requires corresponding vertices on the opposite face.
+
+Also, when CPU time is significantly long, you might want to try
+`export SCUFF_INTERPOLATION_TOLERANCE=1.0e-3`. Setting the internal tolerance at which BEM matrix elements and scattered fields are computed.  The default value is `1.0e-6`. As quoted from the [official documents]:
+
+`scuff-em` uses `Ewald summation` to accelerate the calculation of the periodic Green's function, but even this accelerated calculation is not fast enough to handle the many millions of evaluations needed to assemble the full BEM matrix. For this reason, when assembling the BEM matrix at a given frequency and Bloch vector, scuff-em first precomputes Ewald-summed values of the periodic DGF at grid points of an interpolation grid, after which values are obtained by interpolation (bypassing Ewald summation). ***The spacing of the grid points is chosen automatically to ensure that the maximum relative error between the interpolated and exact values at any point within the grid boundaries is less than  `SCUFF_INTERPOLATION_TOLERANCE`***.
+
+
+[official documents]:<http://homerreid.github.io/scuff-em-documentation/applications/GeneralReference/>
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<p><code>NAN</code> appears when the floating point error happens, a quick check is to execute <code>export SCUFF_ABORT_ON_FPE=1</code> ( set a positive flag on <code>floating-point exception</code>). </p>
+<h1 id="nanproblem">NAN problem</h1>
+
+<p><code>NAN</code> appears when the floating point error happens, a quick check is to execute <code>export SCUFF_ABORT_ON_FPE=1</code> ( set a positive flag on <code>floating-point exception</code>). It will cause the program to stop when floating error happens.</p>
 
 <p>A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. </p>
+
+<p>Another useful debug technique is to set your log file to a more detailed level. Here are the commands from <code>none</code> (no log shown on the screen) to <code>verbose2</code>(most detailed)</p>
+
+<pre><code>export SCUFF_LOGLEVEL="NONE"
+export SCUFF_LOGLEVEL="TERSE"
+export SCUFF_LOGLEVEL="VERBOSE"
+export SCUFF_LOGLEVEL="VERBOSE2"
+</code></pre>
+
+<p>There is a </p>
+
+<h1 id="extendedgeometries">Extended Geometries</h1>
+
+<p>When using extruded geometries, you must use an <code>extrude</code> command in the <code>.geo</code> file instead of meshing it using <code>gmsh</code> beforehand(i.e. using a extruded geometry from a CAD design and gmsh it). It's because of the nature of Green Function requires corresponding vertices on the opposite face.</p>
+
+<p>Also, when CPU time is significantly long, you might want to try
+<code>export SCUFF_INTERPOLATION_TOLERANCE=1.0e-3</code>. Setting the internal tolerance at which BEM matrix elements and scattered fields are computed.  The default value is <code>1.0e-6</code>. As quoted from the <a href="http://homerreid.github.io/scuff-em-documentation/applications/GeneralReference/">official documents</a>:</p>
+
+<p><code>scuff-em</code> uses <code>Ewald summation</code> to accelerate the calculation of the periodic Green's function, but even this accelerated calculation is not fast enough to handle the many millions of evaluations needed to assemble the full BEM matrix. For this reason, when assembling the BEM matrix at a given frequency and Bloch vector, scuff-em first precomputes Ewald-summed values of the periodic DGF at grid points of an interpolation grid, after which values are obtained by interpolation (bypassing Ewald summation). <strong><em>The spacing of the grid points is chosen automatically to ensure that the maximum relative error between the interpolated and exact values at any point within the grid boundaries is less than  <code>SCUFF_INTERPOLATION_TOLERANCE</code></em></strong>.</p>
 <!-- content end -->
 </div>
 <br>
