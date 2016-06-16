@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#SINR 3570
+
+SINR 3570 is a novel Siloxane-based, photo-patternable packaging material developed by Shin-Etsu MicroSi. It is known to be a good wafer bonding material and can be used for flattening dielectric layer in MEMS applications.
+
+Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. 
+
+SINR 3570 series is based on 3170 series thus have a similar property. It's negative tone, and can easily achieve 1~25um thickness. A SINR3570-PF20's nominal (i.e. coated at 5k rpm) thickness is 20um. 
+
+Here is a guide on using SINR3570 series
+
+##Coating
+
+Although it is suppose to be nominal thickness at 5k rpm, often it is not. 
+
+- SINR3570-PF20@20um@2800 rpm@20s
+- SINR3570-PF3@2um@4000 rpm@20s
+
+##Soft bake
+
+-SINR3570-PF20@100@5min
+-SINR3570-PF3@100@1min
+
+##Post exposure bake
+
+-SINR3570-PF20@120@2min
+-SINR3570-PF3@110@2min
+
+##Development
+
+-SINR3570-PF20@IPA@4min
+-SINR3570-PF3@IPA@2x1min
+
+##To Remove
+ - before exposure: rinse with acetone then IPA
+ - after exposure: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)
+
+##Bonding
+
+-SINR3570-PF20@$180^\circ$C@5min@1.5MPa+Post cure@$180^\circ$C@60min
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "3570.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
