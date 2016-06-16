@@ -29,11 +29,11 @@
 
 SINR 3570 is a novel Siloxane-based, photo-patternable packaging material developed by Shin-Etsu MicroSi. It is known to be a good wafer bonding material and can be used for flattening dielectric layer in MEMS applications.
 
-Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. 
+Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. Typically they are [low-k materials]. 
 
 SINR 3570 series is based on 3170 series thus have a similar property. It's negative tone, and can easily achieve 1~25um thickness. A SINR3570-PF20's nominal (i.e. coated at 5k rpm) thickness is 20um. 
 
-Here is a guide on using SINR3570 series
+Here is a guide on using SINR3570 series, some data from [a NPIL paper] on bonding. 
 
 ##Coating
 
@@ -65,11 +65,65 @@ Although it is suppose to be nominal thickness at 5k rpm, often it is not.
 
 -SINR3570-PF20@$180^\circ$C@5min@1.5MPa+Post cure@$180^\circ$C@60min
 
+#Elpac PA-S500
+
+Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating material. 
+
+
+[low-k materials]:<http://www.semi1source.com/notes/>
+[a NPIL paper]:<ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5898765>
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
+<h1 id="sinr3570">SINR 3570</h1>
 
+<p>SINR 3570 is a novel Siloxane-based, photo-patternable packaging material developed by Shin-Etsu MicroSi. It is known to be a good wafer bonding material and can be used for flattening dielectric layer in MEMS applications.</p>
+
+<p>Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. Typically they are <a href="http://www.semi1source.com/notes/">low-k materials</a>. </p>
+
+<p>SINR 3570 series is based on 3170 series thus have a similar property. It's negative tone, and can easily achieve 1~25um thickness. A SINR3570-PF20's nominal (i.e. coated at 5k rpm) thickness is 20um. </p>
+
+<p>Here is a guide on using SINR3570 series, some data from <a href="ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5898765">a NPIL paper</a> on bonding. </p>
+
+<h2 id="coating">Coating</h2>
+
+<p>Although it is suppose to be nominal thickness at 5k rpm, often it is not. </p>
+
+<ul>
+<li>SINR3570-PF20@20um@2800 rpm@20s</li>
+<li>SINR3570-PF3@2um@4000 rpm@20s</li>
+</ul>
+
+<h2 id="softbake">Soft bake</h2>
+
+<p>-SINR3570-PF20@100@5min
+-SINR3570-PF3@100@1min</p>
+
+<h2 id="postexposurebake">Post exposure bake</h2>
+
+<p>-SINR3570-PF20@120@2min
+-SINR3570-PF3@110@2min</p>
+
+<h2 id="development">Development</h2>
+
+<p>-SINR3570-PF20@IPA@4min
+-SINR3570-PF3@IPA@2x1min</p>
+
+<h2 id="toremove">To Remove</h2>
+
+<ul>
+<li>before exposure: rinse with acetone then IPA</li>
+<li>after exposure: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)</li>
+</ul>
+
+<h2 id="bonding">Bonding</h2>
+
+<p>-SINR3570-PF20@<span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" style="position: relative;" tabindex="0" id="MathJax-Element-532-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 2.516em; display: inline-block;" role="math" id="MathJax-Span-2164" class="math"><span style="display: inline-block; position: relative; width: 1.923em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.36em, 1001.92em, 2.378em, -1000em); top: -2.212em; left: 0em;"><span id="MathJax-Span-2165" class="mrow"><span id="MathJax-Span-2166" class="msubsup"><span style="display: inline-block; position: relative; width: 1.929em; height: 0px;"><span style="position: absolute; clip: rect(3.18em, 1001.46em, 4.157em, -1000em); top: -3.99em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-2167" class="mn">180</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span><span style="position: absolute; top: -4.383em; left: 1.5em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-2168" class="mo">∘</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.091em; border-left: 0px solid; width: 0px; height: 1.073em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script id="MathJax-Element-532" type="math/tex">180^\circ</script>C@5min@1.5MPa+Post cure@<span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" style="position: relative;" tabindex="0" id="MathJax-Element-533-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 2.516em; display: inline-block;" role="math" id="MathJax-Span-2169" class="math"><span style="display: inline-block; position: relative; width: 1.923em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.36em, 1001.92em, 2.378em, -1000em); top: -2.212em; left: 0em;"><span id="MathJax-Span-2170" class="mrow"><span id="MathJax-Span-2171" class="msubsup"><span style="display: inline-block; position: relative; width: 1.929em; height: 0px;"><span style="position: absolute; clip: rect(3.18em, 1001.46em, 4.157em, -1000em); top: -3.99em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-2172" class="mn">180</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span><span style="position: absolute; top: -4.383em; left: 1.5em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-2173" class="mo">∘</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.091em; border-left: 0px solid; width: 0px; height: 1.073em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script id="MathJax-Element-533" type="math/tex">180^\circ</script>C@60min</p>
+
+<h1 id="elpacpas500">Elpac PA-S500</h1>
+
+<p>Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating material. </p>
 <!-- content end -->
 </div>
 <br>
