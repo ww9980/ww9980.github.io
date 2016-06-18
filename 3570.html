@@ -37,7 +37,7 @@ Here is a guide on using SINR3570 series, some data from [a NPIL paper] on bondi
 
 ##Coating
 
-Although it is suppose to be nominal thickness at 5k rpm, often it is not. 
+Although it is suppose to be nominal thickness at 5k rpm, often it is not. Here are some practical results
 
 - SINR3570-PF20@20um@2800 rpm@20s
 - SINR3570-PF3@2um@4000 rpm@20s
@@ -47,7 +47,7 @@ Although it is suppose to be nominal thickness at 5k rpm, often it is not.
 -SINR3570-PF20@100@5min
 -SINR3570-PF3@100@1min
 
-##Post exposure bake
+##Post exposure bake/ Hard bake
 
 -SINR3570-PF20@120@2min
 -SINR3570-PF3@110@2min
@@ -59,7 +59,7 @@ Although it is suppose to be nominal thickness at 5k rpm, often it is not.
 
 ##To Remove
  - before exposure: rinse with acetone then IPA
- - after exposure: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)
+ - after exposure and hard bake: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)
 
 ##Bonding
 
@@ -69,10 +69,12 @@ Although it is suppose to be nominal thickness at 5k rpm, often it is not.
 
 Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating material. 
 
+##To Remove
 
-[low-k materials]:<http://www.semi1source.com/notes/>
-[a NPIL paper]:<ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5898765>
-[3170]:<http://www.ultratech.com/pdf/SPIE_02_SINR_sm.pdf>
+ - before exposure: FNA.
+
+ - after exposure and hard bake: ***CAN'T be REMOVED***, tested with HF, FNA, RIE (O2 + CF4), Acetone+ IPA. Can be a really good insulating materail. 
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -81,15 +83,15 @@ Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating mat
 
 <p>SINR 3570 is a novel Siloxane-based, photo-patternable packaging material developed by Shin-Etsu MicroSi. It is known to be a good wafer bonding material and can be used for flattening dielectric layer in MEMS applications.</p>
 
-<p>Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. Typically they are <a href="http://www.semi1source.com/notes/">low-k materials</a>. </p>
+<p>Like SU-8 and BCB (bencocyclobutene), this material allows adhesive bonding which features low bonding temperature, ability to join different wafer materials, and high tolerance to surface topography. Typically they are [low-k materials]. </p>
 
-<p>SINR 3570 series is based on <a href="http://www.ultratech.com/pdf/SPIE_02_SINR_sm.pdf">3170</a> series thus have a similar property. It's negative tone, and can easily achieve 1~25um thickness. A SINR3570-PF20's nominal (i.e. coated at 5k rpm) thickness is 20um. </p>
+<p>SINR 3570 series is based on [3170] series thus have a similar property. It's negative tone, and can easily achieve 1~25um thickness. A SINR3570-PF20's nominal (i.e. coated at 5k rpm) thickness is 20um. </p>
 
-<p>Here is a guide on using SINR3570 series, some data from <a href="ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5898765">a NPIL paper</a> on bonding. </p>
+<p>Here is a guide on using SINR3570 series, some data from [a NPIL paper] on bonding. </p>
 
 <h2 id="coating">Coating</h2>
 
-<p>Although it is suppose to be nominal thickness at 5k rpm, often it is not. </p>
+<p>Although it is suppose to be nominal thickness at 5k rpm, often it is not. Here are some practical results</p>
 
 <ul>
 <li>SINR3570-PF20@20um@2800 rpm@20s</li>
@@ -101,7 +103,7 @@ Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating mat
 <p>-SINR3570-PF20@100@5min
 -SINR3570-PF3@100@1min</p>
 
-<h2 id="postexposurebake">Post exposure bake</h2>
+<h2 id="postexposurebakehardbake">Post exposure bake/ Hard bake</h2>
 
 <p>-SINR3570-PF20@120@2min
 -SINR3570-PF3@110@2min</p>
@@ -115,16 +117,23 @@ Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating mat
 
 <ul>
 <li>before exposure: rinse with acetone then IPA</li>
-<li>after exposure: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)</li>
+<li>after exposure and hard bake: FNA or RIE (using CF4+O2, pressure=100mT, flowrate=12: 50 sccm respectively, 5min removes all 5um resist)</li>
 </ul>
 
 <h2 id="bonding">Bonding</h2>
 
-<p>-SINR3570-PF20@<span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" style="position: relative;" tabindex="0" id="MathJax-Element-37-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 2.516em; display: inline-block;" role="math" id="MathJax-Span-161" class="math"><span style="display: inline-block; position: relative; width: 1.923em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.36em, 1001.92em, 2.378em, -1000em); top: -2.212em; left: 0em;"><span id="MathJax-Span-162" class="mrow"><span id="MathJax-Span-163" class="msubsup"><span style="display: inline-block; position: relative; width: 1.929em; height: 0px;"><span style="position: absolute; clip: rect(3.18em, 1001.46em, 4.157em, -1000em); top: -3.99em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-164" class="mn">180</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span><span style="position: absolute; top: -4.383em; left: 1.5em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-165" class="mo">∘</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.091em; border-left: 0px solid; width: 0px; height: 1.073em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script id="MathJax-Element-37" type="math/tex">180^\circ</script>C@5min@1.5MPa+Post cure@<span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" style="position: relative;" tabindex="0" id="MathJax-Element-38-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 2.516em; display: inline-block;" role="math" id="MathJax-Span-166" class="math"><span style="display: inline-block; position: relative; width: 1.923em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.36em, 1001.92em, 2.378em, -1000em); top: -2.212em; left: 0em;"><span id="MathJax-Span-167" class="mrow"><span id="MathJax-Span-168" class="msubsup"><span style="display: inline-block; position: relative; width: 1.929em; height: 0px;"><span style="position: absolute; clip: rect(3.18em, 1001.46em, 4.157em, -1000em); top: -3.99em; left: 0em;"><span style="font-family: MathJax_Main;" id="MathJax-Span-169" class="mn">180</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span><span style="position: absolute; top: -4.383em; left: 1.5em;"><span style="font-size: 70.7%; font-family: MathJax_Main;" id="MathJax-Span-170" class="mo">∘</span><span style="display: inline-block; width: 0px; height: 3.99em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.212em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.091em; border-left: 0px solid; width: 0px; height: 1.073em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script id="MathJax-Element-38" type="math/tex">180^\circ</script>C@60min</p>
+<p>-SINR3570-PF20@<span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-75-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-361" role="math" style="width: 2.502em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.002em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.453em 1002em 2.452em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-362"><span class="msubsup" id="MathJax-Span-363"><span style="display: inline-block; position: relative; width: 1.952em; height: 0px;"><span style="position: absolute; clip: rect(3.202em 1001.45em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mn" id="MathJax-Span-364" style="font-family: MathJax_Main;">180</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -4.397em; left: 1.502em;"><span class="mo" id="MathJax-Span-365" style="font-size: 70.7%; font-family: MathJax_Main;">∘</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.066em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script type="math/tex" id="MathJax-Element-75">180^\circ</script>C@5min@1.5MPa+Post cure@<span class="MathJax_Preview" style="color: inherit;"></span><span class="MathJax" id="MathJax-Element-76-Frame" tabindex="0" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><msup><mn>180</mn><mo>&amp;#x2218;</mo></msup></math>" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-366" role="math" style="width: 2.502em; display: inline-block;"><span style="display: inline-block; position: relative; width: 2.002em; height: 0px; font-size: 125%;"><span style="position: absolute; clip: rect(1.453em 1002em 2.452em -999.998em); top: -2.298em; left: 0.003em;"><span class="mrow" id="MathJax-Span-367"><span class="msubsup" id="MathJax-Span-368"><span style="display: inline-block; position: relative; width: 1.952em; height: 0px;"><span style="position: absolute; clip: rect(3.202em 1001.45em 4.152em -999.998em); top: -3.998em; left: 0.003em;"><span class="mn" id="MathJax-Span-369" style="font-family: MathJax_Main;">180</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span><span style="position: absolute; top: -4.397em; left: 1.502em;"><span class="mo" id="MathJax-Span-370" style="font-size: 70.7%; font-family: MathJax_Main;">∘</span><span style="display: inline-block; width: 0px; height: 4.002em;"></span></span></span></span></span><span style="display: inline-block; width: 0px; height: 2.302em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.059em; border-left-width: 0px; border-left-style: solid; width: 0px; height: 1.066em;"></span></span></nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><msup><mn>180</mn><mo>∘</mo></msup></math></span></span><script type="math/tex" id="MathJax-Element-76">180^\circ</script>C@60min</p>
 
 <h1 id="elpacpas500">Elpac PA-S500</h1>
 
 <p>Elpac PA-S500 series is a novel Siloxane-based, photo-patternable insulating material. </p>
+
+<h2 id="toremove">To Remove</h2>
+
+<ul>
+<li><p>before exposure: FNA.</p></li>
+<li><p>after exposure and hard bake: <strong><em>CAN'T be REMOVED</em></strong>, tested with HF, FNA, RIE (O2 + CF4), Acetone+ IPA. Can be a really good insulating materail. </p></li>
+</ul>
 <!-- content end -->
 </div>
 <br>
