@@ -25,7 +25,7 @@
 	</div>
 <div id="md" style="display: none;">
 <!-- markdown -->
-#NAN problem and meshing
+#NAN problem
 `NAN` appears when the floating point error happens, a quick check is to execute `export SCUFF_ABORT_ON_FPE=1` ( set a positive flag on `floating-point exception`). It will cause the program to stop when floating error happens.
 
 A better check would be to check your mesh - if there are any overlapping elements. For example, if you have two boxes sharing a single face, this face has to be a boundary condition face instead of two faces overlapping. 
@@ -37,8 +37,24 @@ export SCUFF_LOGLEVEL="TERSE"
 export SCUFF_LOGLEVEL="VERBOSE"
 export SCUFF_LOGLEVEL="VERBOSE2"
 ```
+#Mesh with gmsh and AutoCAD
+I personally love using AutoCAD to draw. Here are some tips and how I link the tools:
 
+ - Try to reduce the number of extra points in your polylines - this result in a dense local mesh. 
+ - Only make a 2D structure with polylines, since you wish to use ***Boundary*** Element Method.
+ - No overlapping structures. 
+ - Polylines should be closed
+
+Use `export` command in AutoCAD and generate `*.igs` files. Note use `*.igs` instead of `*.iges` sometimes is not working properly.
+
+Open GMSH and use `Ruled Planes` tool to create planes from the polylines. One plane at one time and one time only. 
+
+Then click `Mesh/2D`.
+
+#a Meshing Trick
 There is a mesh tool called [Neper], an open source polycrystal generation and meshing package. By using `-M` mode, the module meshes polycrystals described by tessellation files. By `-M trap.msh`, the mesh of the geometry is further optimized saving a ton of CPU time. 
+Note that if you get error with `neper -M ` please open your `~/.neperrc` file and specify your gmsh dictionary  by `-gmsh /usr/bin/gmsh`.
+
 #Extended Geometries
 When using extruded geometries, you must use an `extrude` command in the `.geo` file instead of meshing it using `gmsh` beforehand(i.e. using a extruded geometry from a CAD design and gmsh it). It's because of the nature of Green Function requires corresponding vertices on the opposite face.
 
@@ -48,13 +64,24 @@ Also, when CPU time is significantly long, you might want to try
 `scuff-em` uses `Ewald summation` to accelerate the calculation of the periodic Green's function, but even this accelerated calculation is not fast enough to handle the many millions of evaluations needed to assemble the full BEM matrix. For this reason, when assembling the BEM matrix at a given frequency and Bloch vector, scuff-em first precomputes Ewald-summed values of the periodic DGF at grid points of an interpolation grid, after which values are obtained by interpolation (bypassing Ewald summation). ***The spacing of the grid points is chosen automatically to ensure that the maximum relative error between the interpolated and exact values at any point within the grid boundaries is less than  `SCUFF_INTERPOLATION_TOLERANCE`***.
 
 
+#Units in SCUFF
+I've asked Homer himself about the units both for SCUFF-EM and SCUFF-RF in this [Q&A].
+Basically to sum up:
+ 
+- SCUFF can be unitless without frequency dependent materials
+- SCUFF-RF, default unit is `mm` and `GHz`
+- in any other SCUFF series, remember $\Omega=c/\lambda$ rule.
+
+
+
+[Q&A]:<https://github.com/HomerReid/scuff-em/issues/97>
 [official documents]:<http://homerreid.github.io/scuff-em-documentation/applications/GeneralReference/>
 [neper]:<neper.sourceforge.net>
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
 <!-- content -->
-<h1 id="nanproblemandmeshing">NAN problem and meshing</h1>
+<h1 id="nanproblem">NAN problem</h1>
 
 <p><code>NAN</code> appears when the floating point error happens, a quick check is to execute <code>export SCUFF_ABORT_ON_FPE=1</code> ( set a positive flag on <code>floating-point exception</code>). It will cause the program to stop when floating error happens.</p>
 
@@ -68,7 +95,27 @@ export SCUFF_LOGLEVEL="VERBOSE"
 export SCUFF_LOGLEVEL="VERBOSE2"
 </code></pre>
 
-<p>There is a mesh tool called <a href="neper.sourceforge.net">Neper</a>, an open source polycrystal generation and meshing package. By using <code>-M</code> mode, the module meshes polycrystals described by tessellation files. By <code>-M trap.msh</code>, the mesh of the geometry is further optimized saving a ton of CPU time. </p>
+<h1 id="meshwithgmshandautocad">Mesh with gmsh and AutoCAD</h1>
+
+<p>I personally love using AutoCAD to draw. Here are some tips and how I link the tools:</p>
+
+<ul>
+<li>Try to reduce the number of extra points in your polylines - this result in a dense local mesh. </li>
+<li>Only make a 2D structure with polylines, since you wish to use <strong><em>Boundary</em></strong> Element Method.</li>
+<li>No overlapping structures. </li>
+<li>Polylines should be closed</li>
+</ul>
+
+<p>Use <code>export</code> command in AutoCAD and generate <code>*.igs</code> files. Note use <code>*.igs</code> instead of <code>*.iges</code> sometimes is not working properly.</p>
+
+<p>Open GMSH and use <code>Ruled Planes</code> tool to create planes from the polylines. One plane at one time and one time only. </p>
+
+<p>Then click <code>Mesh/2D</code>.</p>
+
+<h1 id="ameshingtrick">a Meshing Trick</h1>
+
+<p>There is a mesh tool called <a href="neper.sourceforge.net">Neper</a>, an open source polycrystal generation and meshing package. By using <code>-M</code> mode, the module meshes polycrystals described by tessellation files. By <code>-M trap.msh</code>, the mesh of the geometry is further optimized saving a ton of CPU time. 
+Note that if you get error with <code>neper -M</code> please open your <code>~/.neperrc</code> file and specify your gmsh dictionary  by <code>-gmsh /usr/bin/gmsh</code>.</p>
 
 <h1 id="extendedgeometries">Extended Geometries</h1>
 
@@ -78,6 +125,17 @@ export SCUFF_LOGLEVEL="VERBOSE2"
 <code>export SCUFF_INTERPOLATION_TOLERANCE=1.0e-3</code>. Setting the internal tolerance at which BEM matrix elements and scattered fields are computed.  The default value is <code>1.0e-6</code>. As quoted from the <a href="http://homerreid.github.io/scuff-em-documentation/applications/GeneralReference/">official documents</a>:</p>
 
 <p><code>scuff-em</code> uses <code>Ewald summation</code> to accelerate the calculation of the periodic Green's function, but even this accelerated calculation is not fast enough to handle the many millions of evaluations needed to assemble the full BEM matrix. For this reason, when assembling the BEM matrix at a given frequency and Bloch vector, scuff-em first precomputes Ewald-summed values of the periodic DGF at grid points of an interpolation grid, after which values are obtained by interpolation (bypassing Ewald summation). <strong><em>The spacing of the grid points is chosen automatically to ensure that the maximum relative error between the interpolated and exact values at any point within the grid boundaries is less than  <code>SCUFF_INTERPOLATION_TOLERANCE</code></em></strong>.</p>
+
+<h1 id="unitsinscuff">Units in SCUFF</h1>
+
+<p>I've asked Homer himself about the units both for SCUFF-EM and SCUFF-RF in this <a href="https://github.com/HomerReid/scuff-em/issues/97">Q&amp;A</a>.
+Basically to sum up:</p>
+
+<ul>
+<li>SCUFF can be unitless without frequency dependent materials</li>
+<li>SCUFF-RF, default unit is <code>mm</code> and <code>GHz</code></li>
+<li>in any other SCUFF series, remember <span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi mathvariant=&quot;normal&quot;>&amp;#x03A9;</mi><mo>=</mo><mi>c</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mi>&amp;#x03BB;</mi></math>" style="position: relative;" tabindex="0" id="MathJax-Element-959-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 4.641em; display: inline-block;" role="math" id="MathJax-Span-7129" class="math"><span style="display: inline-block; position: relative; width: 3.558em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.798em, 1003.53em, 3.087em, -1000em); top: -2.692em; left: 0em;"><span id="MathJax-Span-7130" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-7131" class="mi">Ω</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-7132" class="mo">=</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;" id="MathJax-Span-7133" class="mi">c</span><span id="MathJax-Span-7134" class="texatom"><span id="MathJax-Span-7135" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-7136" class="mo">/</span></span></span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-7137" class="mi">λ</span></span><span style="display: inline-block; width: 0px; height: 2.692em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.388em; border-left: 0px solid; width: 0px; height: 1.425em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="normal">Ω</mi><mo>=</mo><mi>c</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mi>λ</mi></math></span></span><script id="MathJax-Element-959" type="math/tex">\Omega=c/\lambda</script> rule.</li>
+</ul>
 <!-- content end -->
 </div>
 <br>
