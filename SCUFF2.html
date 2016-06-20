@@ -43,7 +43,8 @@ I personally love using AutoCAD to draw. Here are some tips and how I link the t
  - Try to reduce the number of extra points in your polylines - this result in a dense local mesh. 
  - Only make a 2D structure with polylines, since you wish to use ***Boundary*** Element Method.
  - No overlapping structures. 
- - Polylines should be closed
+ - Polylines should be closed.
+ - Check your units.
 
 Use `export` command in AutoCAD and generate `*.igs` files. Note use `*.igs` instead of `*.iges` sometimes is not working properly.
 
@@ -71,6 +72,47 @@ Basically to sum up:
 - SCUFF can be unitless without frequency dependent materials
 - SCUFF-RF, default unit is `mm` and `GHz`
 - in any other SCUFF series, remember $\Omega=c/\lambda$ rule.
+
+#Run your Simulation
+##Port IDs
+Always run `scuff-analyze --mesh yours.msh --WriteGMSHFiles --WriteGMSHLabels` to generate the `*.pp` file, use `gmsh *.pp` to view it. Turn off all the labels but the `exterior` one, write your port file in the following format.
+```
+PORT
+  PEDGES <Positive ID 1> <Positive ID 2>
+  MEDGES <Negative ID 1> <Negative ID 2>
+ENDPORT
+``` 
+##S and Z parameters
+then use `scuff-rf < SZ` to simulate your S and Z paramters, with this `SZ` file in your folder
+```
+geometry    *.rwggeo
+frequency   0.000
+Cache       *.cache
+SParameters
+ZParameters
+portfile    *.port
+```
+The cited `*.rwggeo` file should look like this:
+```
+OBJECT trap
+  MESHFILE    *.msh
+  METRIAL     PEC
+ENDOBJECT
+```
+You should have the `*.sparms` and `*.zparms`. If these contains `nan` values, check the steps above. Also when re-run your simulations, remember to delete the cache file.
+##Field simulation
+Similar to the S and Z, use `scuff-rf < field` where field contains
+```
+geometry *.rwggeo
+Cache    *.cache
+EPFile *.epfile0
+portfile   *.port
+portcurrentfile *.pc
+```
+Again you need two more new files `*.pc` and `*.epfile0`. 
+`*.pc` file contains the real and imaginary current of the port, calculated from the `Z` parameters (or `S` parameters).
+
+`*.epfile0` contains the points of interest that you wish to evaluate. 
 
 
 
@@ -103,7 +145,8 @@ export SCUFF_LOGLEVEL="VERBOSE2"
 <li>Try to reduce the number of extra points in your polylines - this result in a dense local mesh. </li>
 <li>Only make a 2D structure with polylines, since you wish to use <strong><em>Boundary</em></strong> Element Method.</li>
 <li>No overlapping structures. </li>
-<li>Polylines should be closed</li>
+<li>Polylines should be closed.</li>
+<li>Check your units.</li>
 </ul>
 
 <p>Use <code>export</code> command in AutoCAD and generate <code>*.igs</code> files. Note use <code>*.igs</code> instead of <code>*.iges</code> sometimes is not working properly.</p>
@@ -134,8 +177,58 @@ Basically to sum up:</p>
 <ul>
 <li>SCUFF can be unitless without frequency dependent materials</li>
 <li>SCUFF-RF, default unit is <code>mm</code> and <code>GHz</code></li>
-<li>in any other SCUFF series, remember <span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi mathvariant=&quot;normal&quot;>&amp;#x03A9;</mi><mo>=</mo><mi>c</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mi>&amp;#x03BB;</mi></math>" style="position: relative;" tabindex="0" id="MathJax-Element-959-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 4.641em; display: inline-block;" role="math" id="MathJax-Span-7129" class="math"><span style="display: inline-block; position: relative; width: 3.558em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.798em, 1003.53em, 3.087em, -1000em); top: -2.692em; left: 0em;"><span id="MathJax-Span-7130" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-7131" class="mi">Ω</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-7132" class="mo">=</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;" id="MathJax-Span-7133" class="mi">c</span><span id="MathJax-Span-7134" class="texatom"><span id="MathJax-Span-7135" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-7136" class="mo">/</span></span></span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-7137" class="mi">λ</span></span><span style="display: inline-block; width: 0px; height: 2.692em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.388em; border-left: 0px solid; width: 0px; height: 1.425em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="normal">Ω</mi><mo>=</mo><mi>c</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mi>λ</mi></math></span></span><script id="MathJax-Element-959" type="math/tex">\Omega=c/\lambda</script> rule.</li>
+<li>in any other SCUFF series, remember <span style="color: inherit;" class="MathJax_Preview"></span><span role="presentation" data-mathml="<math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;><mi mathvariant=&quot;normal&quot;>&amp;#x03A9;</mi><mo>=</mo><mi>c</mi><mrow class=&quot;MJX-TeXAtom-ORD&quot;><mo>/</mo></mrow><mi>&amp;#x03BB;</mi></math>" style="position: relative;" tabindex="0" id="MathJax-Element-2641-Frame" class="MathJax"><nobr aria-hidden="true"><span style="width: 4.641em; display: inline-block;" role="math" id="MathJax-Span-19396" class="math"><span style="display: inline-block; position: relative; width: 3.558em; height: 0px; font-size: 130%;"><span style="position: absolute; clip: rect(1.798em, 1003.53em, 3.087em, -1000em); top: -2.692em; left: 0em;"><span id="MathJax-Span-19397" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-19398" class="mi">Ω</span><span style="font-family: MathJax_Main; padding-left: 0.278em;" id="MathJax-Span-19399" class="mo">=</span><span style="font-family: MathJax_Math; font-style: italic; padding-left: 0.278em;" id="MathJax-Span-19400" class="mi">c</span><span id="MathJax-Span-19401" class="texatom"><span id="MathJax-Span-19402" class="mrow"><span style="font-family: MathJax_Main;" id="MathJax-Span-19403" class="mo">/</span></span></span><span style="font-family: MathJax_Math; font-style: italic;" id="MathJax-Span-19404" class="mi">λ</span></span><span style="display: inline-block; width: 0px; height: 2.692em;"></span></span></span><span style="display: inline-block; overflow: hidden; vertical-align: -0.388em; border-left: 0px solid; width: 0px; height: 1.425em;"></span></span></nobr><span role="presentation" class="MJX_Assistive_MathML"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi mathvariant="normal">Ω</mi><mo>=</mo><mi>c</mi><mrow class="MJX-TeXAtom-ORD"><mo>/</mo></mrow><mi>λ</mi></math></span></span><script id="MathJax-Element-2641" type="math/tex">\Omega=c/\lambda</script> rule.</li>
 </ul>
+
+<h1 id="runyoursimulation">Run your Simulation</h1>
+
+<h2 id="portids">Port IDs</h2>
+
+<p>Always run <code>scuff-analyze --mesh yours.msh --WriteGMSHFiles --WriteGMSHLabels</code> to generate the <code>*.pp</code> file, use <code>gmsh *.pp</code> to view it. Turn off all the labels but the <code>exterior</code> one, write your port file in the following format.</p>
+
+<pre><code>PORT
+  PEDGES &lt;Positive ID 1&gt; &lt;Positive ID 2&gt;
+  MEDGES &lt;Negative ID 1&gt; &lt;Negative ID 2&gt;
+ENDPORT
+</code></pre>
+
+<h2 id="sandzparameters">S and Z parameters</h2>
+
+<p>then use <code>scuff-rf &lt; SZ</code> to simulate your S and Z paramters, with this <code>SZ</code> file in your folder</p>
+
+<pre><code>geometry    *.rwggeo
+frequency   0.000
+Cache       *.cache
+SParameters
+ZParameters
+portfile    *.port
+</code></pre>
+
+<p>The cited <code>*.rwggeo</code> file should look like this:</p>
+
+<pre><code>OBJECT trap
+  MESHFILE    *.msh
+  METRIAL     PEC
+ENDOBJECT
+</code></pre>
+
+<p>You should have the <code>*.sparms</code> and <code>*.zparms</code>. If these contains <code>nan</code> values, check the steps above. Also when re-run your simulations, remember to delete the cache file.</p>
+
+<h2 id="fieldsimulation">Field simulation</h2>
+
+<p>Similar to the S and Z, use <code>scuff-rf &lt; field</code> where field contains</p>
+
+<pre><code>geometry *.rwggeo
+Cache    *.cache
+EPFile *.epfile0
+portfile   *.port
+portcurrentfile *.pc
+</code></pre>
+
+<p>Again you need two more new files <code>*.pc</code> and <code>*.epfile0</code>. 
+<code>*.pc</code> file contains the real and imaginary current of the port, calculated from the <code>Z</code> parameters (or <code>S</code> parameters).</p>
+
+<p><code>*.epfile0</code> contains the points of interest that you wish to evaluate. </p>
 <!-- content end -->
 </div>
 <br>
