@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#AJA ATC Orion 5 and its Pumps
+A single wafer magnetron sputtering system by AJA international. This system is evacuated with 3 pumps: one turbo for the load-lock, one turbo for the main chamber and one 2nd stage mechanical pump for the main chamber turbo pump. The mechanical pump is a rotary vane oil seal pump in Southampton Nanocentre.
+
+We recently experienced an oil leakage with the mechanical pump, not as bad as BP's Mexican Gulf incidence but still very bad as to put the tool offline for a couple of weeks. 
+The major reason causing it is the pressure difference during an evacuation process, causing the mechanical pump to fail and sucked oil into the chamber. Without knowing it, sputtering process was performed making the whole chamber burned and the wafer coated with a mixture of oil + silicon nitride. 
+
+Now the mechanical pump is replaced with a dry pump. Yet we dont know what a differential pipeline is which has a bit of oil in it, since it works well, we have no intention in replacing the PTFE pipelines now. 
+#Cleaning 
+##Chamber IPA cleaning
+From the [Official manual]
+```
+Inspect the inside of the chamber and main o-ring seal area for dust, fingerprints or particulates. Use a vacuum cleaner with a clean crevice tool attachment to remove particulate. Use clean IPA on a lint-free cloth to wipe aff dust and fingerprints. Do not use vacuum grease without consulting the factory first.
+```
+##Plasma cleaning
+We also performed an O2 bias clean to get rid of the remaining oil. To further clean it we are performing a a 10min of Ti sputtering (300W, approx. 82nm, 30mTorr) with 10min Ar bias clean for 4 times. 
+ 
+#Standard Operation Procedure
+##Main chamber pumpdown
+- Close the chamber top and secure it with a clamp.
+- Make sure the chamber vent valve is CLOSED.
+- Make sure the valve between the main chamber and load lock (or loading door) is CLOSED.
+- Fully open the turbo isolation/throttle gate valve.
+- Turn “ON” the VACUUM PUMPS breaker switch at the MAIN CHAMBER PD30A control box.
+- When the VACUUM PUMPS switch is turned “ON” both the mechanical pump and the turbo start simultaneously.
+- View the vacuum readout on the main chamber vacuum gauge controller to ensure the pressure is going down. Continue to pump until the desired vacuum level is achieved.
+##Vent
+- Open the main throttle/isolation valve fully
+- Turn the main chamber vacuum breaker off. This will shut off turbo and mechanical pumps and activate the turbopump's delayed vent valve. This valve will completely vent the system in about 5-6 minutes. Once the chamber pressure has reached 150 Torr, it is also possible to speed up the venting by opening the main vent valve. Be sure to shut off the vent valve when the chamber has vented to conserve N2. 
+-Lift chamber top. 
+
+#Other points
+- Insulating substrate/ substrate with insulating coatings/ metals which can oxidize must use RF biasing. 
+- When using gettering targets such as Ti, it's necessary to flow Ar into the chimney to prevent a pressure drop.
+- A power over the limit will cause the target to break into 2 pieces. Check the publications for power density. For example, Diamond and Related Materials 1777-1784 reported a max. power of 150W on a Silicon Nitride target on this tool.
+
+
+[official manual]:<http://www.nanophys.kth.se/nanophys/facilities/nfl/aja/manuals-pdf/ATC_and_ATC_ORION_MANUAL_-_NOV_2005.pdf>
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="ajaatcorion5anditspumps">AJA ATC Orion 5 and its Pumps</h1>
+
+<p>A single wafer magnetron sputtering system by AJA international. This system is evacuated with 3 pumps: one turbo for the load-lock, one turbo for the main chamber and one 2nd stage mechanical pump for the main chamber turbo pump. The mechanical pump is a rotary vane oil seal pump in Southampton Nanocentre.</p>
+
+<p>We recently experienced an oil leakage with the mechanical pump, not as bad as BP's Mexican Gulf incidence but still very bad as to put the tool offline for a couple of weeks. 
+The major reason causing it is the pressure difference during an evacuation process, causing the mechanical pump to fail and sucked oil into the chamber. Without knowing it, sputtering process was performed making the whole chamber burned and the wafer coated with a mixture of oil + silicon nitride. </p>
+
+<p>Now the mechanical pump is replaced with a dry pump. Yet we dont know what a differential pipeline is which has a bit of oil in it, since it works well, we have no intention in replacing the PTFE pipelines now. </p>
+
+<h1 id="cleaning">Cleaning</h1>
+
+<h2 id="chamberipacleaning">Chamber IPA cleaning</h2>
+
+<p>From the <a href="http://www.nanophys.kth.se/nanophys/facilities/nfl/aja/manuals-pdf/ATC_and_ATC_ORION_MANUAL_-_NOV_2005.pdf">Official manual</a></p>
+
+<pre><code>Inspect the inside of the chamber and main o-ring seal area for dust, fingerprints or particulates. Use a vacuum cleaner with a clean crevice tool attachment to remove particulate. Use clean IPA on a lint-free cloth to wipe aff dust and fingerprints. Do not use vacuum grease without consulting the factory first.
+</code></pre>
+
+<h2 id="plasmacleaning">Plasma cleaning</h2>
+
+<p>We also performed an O2 bias clean to get rid of the remaining oil. To further clean it we are performing a a 10min of Ti sputtering (300W, approx. 82nm, 30mTorr) with 10min Ar bias clean for 4 times. </p>
+
+<h1 id="standardoperationprocedure">Standard Operation Procedure</h1>
+
+<h2 id="mainchamberpumpdown">Main chamber pumpdown</h2>
+
+<ul>
+<li>Close the chamber top and secure it with a clamp.</li>
+<li>Make sure the chamber vent valve is CLOSED.</li>
+<li>Make sure the valve between the main chamber and load lock (or loading door) is CLOSED.</li>
+<li>Fully open the turbo isolation/throttle gate valve.</li>
+<li>Turn “ON” the VACUUM PUMPS breaker switch at the MAIN CHAMBER PD30A control box.</li>
+<li>When the VACUUM PUMPS switch is turned “ON” both the mechanical pump and the turbo start simultaneously.</li>
+<li>View the vacuum readout on the main chamber vacuum gauge controller to ensure the pressure is going down. Continue to pump until the desired vacuum level is achieved.</li>
+</ul>
+
+<h2 id="vent">Vent</h2>
+
+<ul>
+<li>Open the main throttle/isolation valve fully</li>
+<li>Turn the main chamber vacuum breaker off. This will shut off turbo and mechanical pumps and activate the turbopump's delayed vent valve. This valve will completely vent the system in about 5-6 minutes. Once the chamber pressure has reached 150 Torr, it is also possible to speed up the venting by opening the main vent valve. Be sure to shut off the vent valve when the chamber has vented to conserve N2. 
+-Lift chamber top. </li>
+</ul>
+
+<h1 id="otherpoints">Other points</h1>
+
+<ul>
+<li>Insulating substrate/ substrate with insulating coatings/ metals which can oxidize must use RF biasing. </li>
+<li>When using gettering targets such as Ti, it's necessary to flow Ar into the chimney to prevent a pressure drop.</li>
+<li>A power over the limit will cause the target to break into 2 pieces. Check the publications for power density. For example, Diamond and Related Materials 1777-1784 reported a max. power of 150W on a Silicon Nitride target on this tool.</li>
+</ul>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "20160630.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
