@@ -40,6 +40,10 @@ Inspect the inside of the chamber and main o-ring seal area for dust, fingerprin
 ```
 ##Plasma cleaning
 We also performed an O2 bias clean to get rid of the remaining oil. To further clean it we are performing a a 10min of Ti sputtering (300W, approx. 82nm, 30mTorr) with 10min Ar bias clean for 4 times. 
+##Target cleaning
+In our case, the burned carbon was left on the target surviving IPA wiping. We have to perform an O2 plasma clean on the target. However we can't do it in other tools like RIE tool. Because a target is typically indium bonded on a copper plate, and copper is extremely diffusive, no one likes it in their tool. 
+
+Here is what I did - to fill the chamber with O2 and use Si3N4 gun to strike it. At 80mTorr, 100W, the oxygen plasma has a really low voltage (2-4V), glowing yellow-white (RGB#F7F6C3). 
  
 #Standard Operation Procedure
 ##Main chamber pumpdown
@@ -54,6 +58,10 @@ We also performed an O2 bias clean to get rid of the remaining oil. To further c
 - Open the main throttle/isolation valve fully
 - Turn the main chamber vacuum breaker off. This will shut off turbo and mechanical pumps and activate the turbopump's delayed vent valve. This valve will completely vent the system in about 5-6 minutes. Once the chamber pressure has reached 150 Torr, it is also possible to speed up the venting by opening the main vent valve. Be sure to shut off the vent valve when the chamber has vented to conserve N2. 
 -Lift chamber top. 
+#Silicon Nitride
+Care must be taken when working with silicon nitride target - it can't stand a high power density, see this [paper]. 
+
+It seems that silicon nitride does not strike with nitrogen atmosphere, I used argon at 90mTorr and striked at 100W. After 10s or so, I changed the chamber pressure to 2mTorr. It can stably deposit and the current is about 1A. 
 
 #Other points
 - Insulating substrate/ substrate with insulating coatings/ metals which can oxidize must use RF biasing. 
@@ -62,6 +70,7 @@ We also performed an O2 bias clean to get rid of the remaining oil. To further c
 
 
 [official manual]:<http://www.nanophys.kth.se/nanophys/facilities/nfl/aja/manuals-pdf/ATC_and_ATC_ORION_MANUAL_-_NOV_2005.pdf>
+[paper]:<http://www3.ntu.edu.sg/ThinFilms/mae-thinfilms/Thinfilms/pdfpapers/DIAMAT3357.pdf>
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -88,6 +97,12 @@ The major reason causing it is the pressure difference during an evacuation proc
 
 <p>We also performed an O2 bias clean to get rid of the remaining oil. To further clean it we are performing a a 10min of Ti sputtering (300W, approx. 82nm, 30mTorr) with 10min Ar bias clean for 4 times. </p>
 
+<h2 id="targetcleaning">Target cleaning</h2>
+
+<p>In our case, the burned carbon was left on the target surviving IPA wiping. We have to perform an O2 plasma clean on the target. However we can't do it in other tools like RIE tool. Because a target is typically indium bonded on a copper plate, and copper is extremely diffusive, no one likes it in their tool. </p>
+
+<p>Here is what I did - to fill the chamber with O2 and use Si3N4 gun to strike it. At 80mTorr, 100W, the oxygen plasma has a really low voltage (2-4V), glowing yellow-white (RGB#F7F6C3). </p>
+
 <h1 id="standardoperationprocedure">Standard Operation Procedure</h1>
 
 <h2 id="mainchamberpumpdown">Main chamber pumpdown</h2>
@@ -109,6 +124,12 @@ The major reason causing it is the pressure difference during an evacuation proc
 <li>Turn the main chamber vacuum breaker off. This will shut off turbo and mechanical pumps and activate the turbopump's delayed vent valve. This valve will completely vent the system in about 5-6 minutes. Once the chamber pressure has reached 150 Torr, it is also possible to speed up the venting by opening the main vent valve. Be sure to shut off the vent valve when the chamber has vented to conserve N2. 
 -Lift chamber top. </li>
 </ul>
+
+<h1 id="siliconnitride">Silicon Nitride</h1>
+
+<p>Care must be taken when working with silicon nitride target - it can't stand a high power density, see this <a href="http://www3.ntu.edu.sg/ThinFilms/mae-thinfilms/Thinfilms/pdfpapers/DIAMAT3357.pdf">paper</a>. </p>
+
+<p>It seems that silicon nitride does not strike with nitrogen atmosphere, I used argon at 90mTorr and striked at 100W. After 10s or so, I changed the chamber pressure to 2mTorr. It can stably deposit and the current is about 1A. </p>
 
 <h1 id="otherpoints">Other points</h1>
 
