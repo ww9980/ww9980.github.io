@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+There are a few high lights on Quantum UK 2016
+#Southampton microscale vacuum chamber
+They used a **UHV Aligner Die Bonder** (not the AML bonder in nanocentre/Sussex IQT cleanroom, it's their own bonder in dept of physics) to seal both sides of the matchbox with an insitu **air plasma cleaning prior to bonding**. 
+They found that **Hydroxyl activation** of the surfaces and low power(<1W) air plasma cleaning helped bond quality alot. 
+
+They used Aluminosilicate glass to minimize noble gas permeation.
+They used Ti coating as an extra gatter source.
+They claimed a pressure of 10^-8 with an overnight baking. 
+
+#Feedthroughs for Soton microchamber
+Very much like TSV, they used the Bosch tool too. Which gives me a reference on how small my feedpads in TSV can be. 
+
+They used glass-in-silicon reflow to produce feedthroughs. They used external CMP service.
+To allow a decent RF performance, they used diffusive deep level doping of gold into the feedthroughs in silicon. This makes silicon more resistive thus reduce RF losses. The reflow temperature is around 900degC (might be wrong, from memory). 
+
+#On-Chip QKD
+Delivered by ORC. Bristol is making similar device using external microfab service and commercializing. 
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>There are a few high lights on Quantum UK 2016</p>
+
+<h1 id="southamptonmicroscalevacuumchamber">Southampton microscale vacuum chamber</h1>
+
+<p>They used a <strong>UHV Aligner Die Bonder</strong> (not the AML bonder in nanocentre/Sussex IQT cleanroom, it's their own bonder in dept of physics) to seal both sides of the matchbox with an insitu <strong>air plasma cleaning prior to bonding</strong>. 
+They found that <strong>Hydroxyl activation</strong> of the surfaces and low power(&lt;1W) air plasma cleaning helped bond quality alot. </p>
+
+<p>They used Aluminosilicate glass to minimize noble gas permeation.
+They used Ti coating as an extra gatter source.
+They claimed a pressure of 10^-8 with an overnight baking. </p>
+
+<h1 id="feedthroughsforsotonmicrochamber">Feedthroughs for Soton microchamber</h1>
+
+<p>Very much like TSV, they used the Bosch tool too. Which gives me a reference on how small my feedpads in TSV can be. </p>
+
+<p>They used glass-in-silicon reflow to produce feedthroughs. They used external CMP service.
+To allow a decent RF performance, they used diffusive deep level doping of gold into the feedthroughs in silicon. This makes silicon more resistive thus reduce RF losses. The reflow temperature is around 900degC (might be wrong, from memory). </p>
+
+<h1 id="onchipqkd">On-Chip QKD</h1>
+
+<p>Delivered by ORC. Bristol is making similar device using external microfab service and commercializing. </p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "MVCQ.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
