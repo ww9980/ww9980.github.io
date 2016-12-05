@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#loading effect in DSE - design considerations 
+DSE has loading effect, according to the model of Mogab [http://jes.ecsdl.org/content/124/8/1262][http://lib.tkk.fi/Diss/2005/isbn9513864367/article2.pdf], a good design should have an etchable area <20%, feature size should be <2mm. 
+
+#Michigan Method Recipe
+In the DSE tool someone used the method introduced by Michigan U [http://wims.eecs.umich.edu/publications/papers/Owen_Najafi_MEMS_Jan_2012.pdf] which can give us a high aspect ratio by varying parameters in the process. 
+
+#Au etch and redeposition in ICP
+A through study[http://www.eee.metu.edu.tr/~tayfuna/papers/akin_j37_JMM_AuEtch.pdf] of Ti/ Au deposition in ICP etching. Their metal system is very like ours: Si-SiNx-Cr-Au-PR. Some interesting results from them:
+ 1)They showed that a thin Ti layer of 7nm can help eliminate the byproduct of Cl2 etching. Ti is a hardmask here. 
+ 2)The byproduct of Cl2 ICP are AuClx and Au particles
+ 3)A higher RF platen power is preferred - their recipe is 
+      Cl2 15sccm
+      Ar 5sccm
+      Pressure 2mTorr
+      RF Coil   600W
+      RF platen 250W
+      Table temperature 20degC
+4)They also tried different resist however since they are americans theres no help to us on which resist is better.
+
+#hardmask in DSE
+I read from somewhere that SiO2 can be a hardmask in DSE and the selectivity 
+#Chemistry of RIE/ICP/DSE
+[https://ece.uwaterloo.ca/~bcui/content/NE%20343/Chapter%2010%20Etching%20_%20III.pptx]
+Choice of reactance gasses to etch a specific film depends on the ability to form volatile byproducts that can be removed by pump
+
+Lower boiling point = higher tendency to evaporate = more volatile. A higher table temperature can help with high boiling point compounds. 
+
+Au can be etched by Cl2 because AuClx's boiling point is 200-300 degC. However Cu cant be etched because CuClx boiling point is 993degC. 
+
+p- or a- Silicon etchants
+SF6, CF4 * near isotropic, no selectivity over SiO2
+CF4+H2, CHF3 * very anisotropic, no selectivity over SiO2
+CF4+O2 * isotropic, selectivity over SiO2
+HBr, Cl2, Cl2+HBr+O2 * very anisotropic, most selectivity over SiO2
+
+SiO2 
+SF6, NF3, CF4+O2, CF4 * near isotropic, anisotropy when high ion energy and low pressure, no selectivity over Si
+CF4+H2, CHF3+O2, C2F6, C3F8 * very anisotropic, selectivity over Si
+CHF3+C4F8+ CO * anisotropic, selectivity over SiNx
+
+SiNx
+CF4+O2 * isotropic, selectivity over SiO2 but no selectivity over Si
+CF4+H2 * very anisotropic, selectivity over Si but no selectivity over SiO2
+CHF3+O2, CH2F2 * very isotropic, selectivity over Si and SiO2
+
+Al
+Cl2 * iso, undercutting
+Cl2 + CHCl3, Cl2+N2 * very aniso
+
+Ti 
+Cl2, CF4
+
+H2 addition can help to make a more vertical sidewall profile by lowering horizontal etching rate. 
+
+#RTA can improve the quality of TEOS PECVD SiO2
+A report[https://www.ipen.br/biblioteca/cd/cbms/1997/SBMicro/ARTIGO07.PDF] says that TEOS PECVD SiO2 is improved by RTA. 
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="loadingeffectindsedesignconsiderations">loading effect in DSE - design considerations</h1>
+
+<p>DSE has loading effect, according to the model of Mogab [http://jes.ecsdl.org/content/124/8/1262][http://lib.tkk.fi/Diss/2005/isbn9513864367/article2.pdf], a good design should have an etchable area &lt;20%, feature size should be &lt;2mm. </p>
+
+<h1 id="michiganmethodrecipe">Michigan Method Recipe</h1>
+
+<p>In the DSE tool someone used the method introduced by Michigan U [http://wims.eecs.umich.edu/publications/papers/Owen<em>Najafi</em>MEMS<em>Jan</em>2012.pdf] which can give us a high aspect ratio by varying parameters in the process. </p>
+
+<h1 id="auetchandredepositioninicp">Au etch and redeposition in ICP</h1>
+
+<p>A through study[http://www.eee.metu.edu.tr/~tayfuna/papers/akin<em>j37</em>JMM_AuEtch.pdf] of Ti/ Au deposition in ICP etching. Their metal system is very like ours: Si-SiNx-Cr-Au-PR. Some interesting results from them:
+ 1)They showed that a thin Ti layer of 7nm can help eliminate the byproduct of Cl2 etching. Ti is a hardmask here. 
+ 2)The byproduct of Cl2 ICP are AuClx and Au particles
+ 3)A higher RF platen power is preferred - their recipe is 
+      Cl2 15sccm
+      Ar 5sccm
+      Pressure 2mTorr
+      RF Coil   600W
+      RF platen 250W
+      Table temperature 20degC
+4)They also tried different resist however since they are americans theres no help to us on which resist is better.</p>
+
+<h1 id="hardmaskindse">hardmask in DSE</h1>
+
+<p>I read from somewhere that SiO2 can be a hardmask in DSE and the selectivity </p>
+
+<h1 id="chemistryofrieicpdse">Chemistry of RIE/ICP/DSE</h1>
+
+<p>[https://ece.uwaterloo.ca/~bcui/content/NE%20343/Chapter%2010%20Etching%20_%20III.pptx]
+Choice of reactance gasses to etch a specific film depends on the ability to form volatile byproducts that can be removed by pump</p>
+
+<p>Lower boiling point = higher tendency to evaporate = more volatile. A higher table temperature can help with high boiling point compounds. </p>
+
+<p>Au can be etched by Cl2 because AuClx's boiling point is 200-300 degC. However Cu cant be etched because CuClx boiling point is 993degC. </p>
+
+<p>p- or a- Silicon etchants
+SF6, CF4 * near isotropic, no selectivity over SiO2
+CF4+H2, CHF3 * very anisotropic, no selectivity over SiO2
+CF4+O2 * isotropic, selectivity over SiO2
+HBr, Cl2, Cl2+HBr+O2 * very anisotropic, most selectivity over SiO2</p>
+
+<p>SiO2 
+SF6, NF3, CF4+O2, CF4 * near isotropic, anisotropy when high ion energy and low pressure, no selectivity over Si
+CF4+H2, CHF3+O2, C2F6, C3F8 * very anisotropic, selectivity over Si
+CHF3+C4F8+ CO * anisotropic, selectivity over SiNx</p>
+
+<p>SiNx
+CF4+O2 * isotropic, selectivity over SiO2 but no selectivity over Si
+CF4+H2 * very anisotropic, selectivity over Si but no selectivity over SiO2
+CHF3+O2, CH2F2 * very isotropic, selectivity over Si and SiO2</p>
+
+<p>Al
+Cl2 * iso, undercutting
+Cl2 + CHCl3, Cl2+N2 * very aniso</p>
+
+<p>Ti 
+Cl2, CF4</p>
+
+<p>H2 addition can help to make a more vertical sidewall profile by lowering horizontal etching rate. </p>
+
+<h1 id="rtacanimprovethequalityofteospecvdsio2">RTA can improve the quality of TEOS PECVD SiO2</h1>
+
+<p>A report[https://www.ipen.br/biblioteca/cd/cbms/1997/SBMicro/ARTIGO07.PDF] says that TEOS PECVD SiO2 is improved by RTA. </p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "20161205.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
