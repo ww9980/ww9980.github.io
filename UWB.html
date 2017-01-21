@@ -36,9 +36,21 @@ The breakout board can be found here. This breakout works with Arduino Mini Pro 
 
 Or you can use my the other board which has ATmega microprocessor soldered onto the board itself. 
 
+#Coding
+I used Thero's library for Arduino. Simply go to Arduino IDE and search DW1000 in library manager. 
 
+The library provides you with multiple modes to work with:
 
+* MODE_ LONGDATA_ RANGE_LOWPOWER[];
+* MODE_ SHORTDATA_ FAST_LOWPOWER[];
+*       MODE_ LONGDATA_ FAST_LOWPOWER[];
+*      MODE_ SHORTDATA_ FAST_ACCURACY[];
+*     MODE_ LONGDATA_ FAST_ACCURACY[];
+*    MODE_ LONGDATA_ RANGE_ACCURACY[];
 
+Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.
+
+We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimization. 
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -58,6 +70,25 @@ Or you can use my the other board which has ATmega microprocessor soldered onto 
 <p>The breakout board can be found here. This breakout works with Arduino Mini Pro 8MHz 3.3V version. We have tested that the chip works well with the cheap Chinese copy of Mini Pro and only cost CNY17 (ca 1pounds/ USD$1.5). </p>
 
 <p>Or you can use my the other board which has ATmega microprocessor soldered onto the board itself. </p>
+
+<h1 id="coding">Coding</h1>
+
+<p>I used Thero's library for Arduino. Simply go to Arduino IDE and search DW1000 in library manager. </p>
+
+<p>The library provides you with multiple modes to work with:</p>
+
+<ul>
+<li>MODE_ LONGDATA_ RANGE_LOWPOWER[];</li>
+<li>MODE_ SHORTDATA_ FAST_LOWPOWER[];</li>
+<li>MODE_ LONGDATA_ FAST_LOWPOWER[];</li>
+<li>MODE_ SHORTDATA_ FAST_ACCURACY[];</li>
+<li>MODE_ LONGDATA_ FAST_ACCURACY[];</li>
+<li>MODE_ LONGDATA_ RANGE_ACCURACY[];</li>
+</ul>
+
+<p>Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.</p>
+
+<p>We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimization. </p>
 <!-- content end -->
 </div>
 <br>
