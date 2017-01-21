@@ -34,7 +34,7 @@ The document claims that it has a max range of 300m and an accuracy of 10cm was 
 #Hardware
 The breakout board can be found here. This breakout works with Arduino Mini Pro 8MHz 3.3V version. We have tested that the chip works well with the cheap Chinese copy of Mini Pro and only cost CNY17 (ca 1pounds/ USD$1.5). 
 
-Or you can use my the other board which has ATmega microprocessor soldered onto the board itself. 
+Or you can use my the other board which has an 8-bit ATmega328 microprocessor soldered onto the board itself. 
 
 #Coding
 I used Thero's library for Arduino. Simply go to Arduino IDE and search DW1000 in library manager. 
@@ -50,7 +50,22 @@ The library provides you with multiple modes to work with:
 
 Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.
 
-We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimization. 
+We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimisation. 
+#possible ways to improve covering range
+
+* a better grounding -> better antenna performance
+#Fresnel Zone
+In RF propaganda, instead of using Line of Sight (LoS) rule, Fresnel Zone has to be taken into consideration.
+
+Here is a calculator from RF cafe: https://www.everythingrf.com/rf-calculators/fresnel-zone-calculator
+
+When 60% of the 1st Fresnel Zone is clear, we consider the space to be safe for our LoS equivalent. 
+
+If we are talking about 100m at 4GHz, it means that we have to make sure that 60% space is free in an eclipse forming around the antenna path with a Radius of ca 1m. 
+
+
+
+
 <!-- markdown end -->
 </div>
 <div class="entry" id="main">
@@ -69,7 +84,7 @@ We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANG
 
 <p>The breakout board can be found here. This breakout works with Arduino Mini Pro 8MHz 3.3V version. We have tested that the chip works well with the cheap Chinese copy of Mini Pro and only cost CNY17 (ca 1pounds/ USD$1.5). </p>
 
-<p>Or you can use my the other board which has ATmega microprocessor soldered onto the board itself. </p>
+<p>Or you can use my the other board which has an 8-bit ATmega328 microprocessor soldered onto the board itself. </p>
 
 <h1 id="coding">Coding</h1>
 
@@ -88,7 +103,23 @@ We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANG
 
 <p>Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.</p>
 
-<p>We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimization. </p>
+<p>We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimisation. </p>
+
+<h1 id="possiblewaystoimprovecoveringrange">possible ways to improve covering range</h1>
+
+<ul>
+<li>a better grounding -&gt; better antenna performance</li>
+</ul>
+
+<h1 id="fresnelzone">Fresnel Zone</h1>
+
+<p>In RF propaganda, instead of using Line of Sight (LoS) rule, Fresnel Zone has to be taken into consideration.</p>
+
+<p>Here is a calculator from RF cafe: https://www.everythingrf.com/rf-calculators/fresnel-zone-calculator</p>
+
+<p>When 60% of the 1st Fresnel Zone is clear, we consider the space to be safe for our LoS equivalent. </p>
+
+<p>If we are talking about 100m at 4GHz, it means that we have to make sure that 60% space is free in an eclipse forming around the antenna path with a Radius of ca 1m. </p>
 <!-- content end -->
 </div>
 <br>
