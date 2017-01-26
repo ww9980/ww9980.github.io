@@ -48,6 +48,15 @@ The library provides you with multiple modes to work with:
 * MODE_ LONGDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and long preambles)
 * MODE_ LONGDATA_ RANGE_ACCURACY (basically this is 110 kb/s data rate, 64 MHz PRF and long preambles)
 
+where PRF is the pulse repetition frequency (PRF) of data transmissions with the DW1000. Either
+
+* TX_PULSE_FREQ_16MHZ (i.e. 16 MHz)
+* TX_PULSE_FREQ_64MHZ (i.e. 64 MHz) 
+
+has to be chosen.
+
+Note that the 16 MHz setting is more power efficient, while the 64 MHz setting requires more power, but also delivers slightly better transmission performance (i.e. on communication range and timestamp accuracy) (see DWM1000 User Manual, section 9.3).
+
 Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.
 
 We report a working distance of 70m with an accuracy of 30cm with LONGDATA_ RANGE_ LOWPOWER mode without any optimisation. 
@@ -109,6 +118,17 @@ If you are using STM32 platform, KitSprout's kit is your choice.
 <li>MODE_ LONGDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and long preambles)</li>
 <li>MODE_ LONGDATA_ RANGE_ACCURACY (basically this is 110 kb/s data rate, 64 MHz PRF and long preambles)</li>
 </ul>
+
+<p>where PRF is the pulse repetition frequency (PRF) of data transmissions with the DW1000. Either</p>
+
+<ul>
+<li>TX<em>PULSE</em>FREQ_16MHZ (i.e. 16 MHz)</li>
+<li>TX<em>PULSE</em>FREQ_64MHZ (i.e. 64 MHz) </li>
+</ul>
+
+<p>has to be chosen.</p>
+
+<p>Note that the 16 MHz setting is more power efficient, while the 64 MHz setting requires more power, but also delivers slightly better transmission performance (i.e. on communication range and timestamp accuracy) (see DWM1000 User Manual, section 9.3).</p>
 
 <p>Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.</p>
 
