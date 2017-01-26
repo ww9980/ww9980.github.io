@@ -41,12 +41,12 @@ I used Thero's library for Arduino. Simply go to Arduino IDE and search DW1000 i
 
 The library provides you with multiple modes to work with:
 
-* MODE_ LONGDATA_ RANGE_LOWPOWER[];
-* MODE_ SHORTDATA_ FAST_LOWPOWER[];
-*       MODE_ LONGDATA_ FAST_LOWPOWER[];
-*      MODE_ SHORTDATA_ FAST_ACCURACY[];
-*     MODE_ LONGDATA_ FAST_ACCURACY[];
-*    MODE_ LONGDATA_ RANGE_ACCURACY[];
+* MODE_ LONGDATA_ RANGE_LOWPOWER (basically this is 110 kb/s data rate, 16 MHz PRF and long preambles)
+* MODE_ SHORTDATA_ FAST_LOWPOWER (basically this is 6.8 Mb/s data rate, 16 MHz PRF and short preambles)
+* MODE_ LONGDATA_ FAST_LOWPOWER (basically this is 6.8 Mb/s data rate, 16 MHz PRF and long preambles)
+* MODE_ SHORTDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and short preambles)
+* MODE_ LONGDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and long preambles)
+* MODE_ LONGDATA_ RANGE_ACCURACY (basically this is 110 kb/s data rate, 64 MHz PRF and long preambles)
 
 Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.
 
@@ -102,12 +102,12 @@ If you are using STM32 platform, KitSprout's kit is your choice.
 <p>The library provides you with multiple modes to work with:</p>
 
 <ul>
-<li>MODE_ LONGDATA_ RANGE_LOWPOWER[];</li>
-<li>MODE_ SHORTDATA_ FAST_LOWPOWER[];</li>
-<li>MODE_ LONGDATA_ FAST_LOWPOWER[];</li>
-<li>MODE_ SHORTDATA_ FAST_ACCURACY[];</li>
-<li>MODE_ LONGDATA_ FAST_ACCURACY[];</li>
-<li>MODE_ LONGDATA_ RANGE_ACCURACY[];</li>
+<li>MODE_ LONGDATA_ RANGE_LOWPOWER (basically this is 110 kb/s data rate, 16 MHz PRF and long preambles)</li>
+<li>MODE_ SHORTDATA_ FAST_LOWPOWER (basically this is 6.8 Mb/s data rate, 16 MHz PRF and short preambles)</li>
+<li>MODE_ LONGDATA_ FAST_LOWPOWER (basically this is 6.8 Mb/s data rate, 16 MHz PRF and long preambles)</li>
+<li>MODE_ SHORTDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and short preambles)</li>
+<li>MODE_ LONGDATA_ FAST_ACCURACY (basically this is 6.8 Mb/s data rate, 64 MHz PRF and long preambles)</li>
+<li>MODE_ LONGDATA_ RANGE_ACCURACY (basically this is 110 kb/s data rate, 64 MHz PRF and long preambles)</li>
 </ul>
 
 <p>Corresponding to different frame structure thus different transmission rate hence different range/power/accuracy.</p>
