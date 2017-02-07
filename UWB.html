@@ -72,6 +72,8 @@ When 60% of the 1st Fresnel Zone is clear, we consider the space to be safe for 
 
 If we are talking about 100m at 4GHz, it means that we have to make sure that 60% space is free in an eclipse forming around the antenna path with a Radius of ca 1m. 
 
+#Grounding
+RF grounding is an essential issue. We did a test to see how a better grounding reduces noise on board. By fixing 2 modules at a distance, we first read out the intensity of the signal with both modules powered by AA batteries. Then we connect both modules to a ground in a wall socket and read out the dBm again. The average signal in a poor grounding case is -67.13dBm, with a standard derivation of 2.13. A good grounding reduced its standard derivation to 0.237. This corresponds to a noise of 0.6mW which will play a much bigger role when the signal reaches -100dBm as the modules are being pushed to its max. coverage range. 
 
 #Issues with Designing
 * Thermal drift: DWM1000 doesn't have a TCXO thus a 3-5m drift is observed before thermal equilibrium is reached
@@ -151,6 +153,10 @@ If you are using STM32 platform, KitSprout's kit is your choice.
 <p>When 60% of the 1st Fresnel Zone is clear, we consider the space to be safe for our LoS equivalent. </p>
 
 <p>If we are talking about 100m at 4GHz, it means that we have to make sure that 60% space is free in an eclipse forming around the antenna path with a Radius of ca 1m. </p>
+
+<h1 id="grounding">Grounding</h1>
+
+<p>RF grounding is an essential issue. We did a test to see how a better grounding reduces noise on board. By fixing 2 modules at a distance, we first read out the intensity of the signal with both modules powered by AA batteries. Then we connect both modules to a ground in a wall socket and read out the dBm again. The average signal in a poor grounding case is -67.13dBm, with a standard derivation of 2.13. A good grounding reduced its standard derivation to 0.237. This correspondes to a noise of 0.6mW which will play a much bigger role when the signal reaches -100dBm as the modules are being pushed to its max. coverage range. </p>
 
 <h1 id="issueswithdesigning">Issues with Designing</h1>
 
