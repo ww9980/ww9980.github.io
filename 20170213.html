@@ -27,10 +27,18 @@
 <!-- markdown -->
 When plating gold with a photoresist mask, we had problem with adhesion. **Photoresist in general adhere poorly to noble metals like Ag, Au**. Al and Ti are the most favorable metals in term of adhesion. 
 
-Also **After HF removal of SiO2, the adhesion strongly depends on the completeness of removal**. If the surface is F free, it is passivated with H. Otherwise the remaining SiO2 forms compound with F and can only be restored at 700degC. [SiO2]
-(http://www.microchemicals.com/technical_information/resist_adhesion.pdf)
+Also **After HF removal of SiO2, the adhesion strongly depends on the completeness of removal**. If the surface is F free, it is passivated with H. Otherwise the remaining SiO2 forms compound with F and can only be restored at 700degC. 
+[[ref1]](http://www.microchemicals.com/technical_information/resist_adhesion.pdf)
 
 In general it's better to avoid using HF to remove exposing Ti with photoresist mask as HF diffuses through the resist film. 
+
+I don't recommend Al despite its good adhesion. Al etching is highly exothermic, an (inevitable, since isotropic etching) under-etching of the resist mask causes local heating (increased etch rate) and super-proportional under etching of the mask as a consequence, if no agitation is performed. [[ref2]](http://www.microchemicals.de/secret/etching.pdf)
+
+Ti can be used if a proper dry etch is available. The typical etchants are 1. HF, 2. nitric acid + ammonium fluoride. Both attacks resist. An RIE etch with 200W RF power, 12sccm CF4 + 38sccm Ar will remove >10nm Ti in 30s. 
+
+Cr is yet another option as removing cr does not involve any HF or nitric acid. A typical etchant is Ce(NH4)2(NO3)6 + CH3COOH. The reaction is very fast, do dilute to control the rate. 
+
+SiO2 is interesting because Ti Prime is designed to work with it! It can be removed using RIE but no wet etch is recommended as it uses HF. 
 
 
 <!-- markdown end -->
@@ -39,10 +47,18 @@ In general it's better to avoid using HF to remove exposing Ti with photoresist 
 <!-- content -->
 <p>When plating gold with a photoresist mask, we had problem with adhesion. <strong>Photoresist in general adhere poorly to noble metals like Ag, Au</strong>. Al and Ti are the most favorable metals in term of adhesion. </p>
 
-<p>Also <strong>After HF removal of SiO2, the adhesion strongly depends on the completeness of removal</strong>. If the surface is F free, it is passivated with H. Otherwise the remaining SiO2 forms compound with F and can only be restored at 700degC. [SiO2]
-(http://www.microchemicals.com/technical<em>information/resist</em>adhesion.pdf)</p>
+<p>Also <strong>After HF removal of SiO2, the adhesion strongly depends on the completeness of removal</strong>. If the surface is F free, it is passivated with H. Otherwise the remaining SiO2 forms compound with F and can only be restored at 700degC. 
+<a href="http://www.microchemicals.com/technical_information/resist_adhesion.pdf">[ref1]</a></p>
 
 <p>In general it's better to avoid using HF to remove exposing Ti with photoresist mask as HF diffuses through the resist film. </p>
+
+<p>I don't recommend Al despite its good adhesion. Al etching is highly exothermic, an (inevitable, since isotropic etching) under-etching of the resist mask causes local heating (increased etch rate) and super-proportional under etching of the mask as a consequence, if no agitation is performed. <a href="http://www.microchemicals.de/secret/etching.pdf">[ref2]</a></p>
+
+<p>Ti can be used if a proper dry etch is available. The typical etchants are 1. HF, 2. nitric acid + ammonium fluoride. Both attacks resist. An RIE etch with 200W RF power, 12sccm CF4 + 38sccm Ar will remove &gt;10nm Ti in 30s. </p>
+
+<p>Cr is yet another option as removing cr does not involve any HF or nitric acid. A typical etchant is Ce(NH4)2(NO3)6 + CH3COOH. The reaction is very fast, do dilute to control the rate. </p>
+
+<p>SiO2 is interesting because Ti Prime is designed to work with it! It can be removed using RIE but no wet etch is recommended as it uses HF. </p>
 <!-- content end -->
 </div>
 <br>
