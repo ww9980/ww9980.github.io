@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+A mate of mine and I were working on a 3D printer in the past week. It's a Chinese rip-off of Ultimaker2+ and was carried in a baggage from Beijing. It's only about $300. 
+
+The installation guide is a bit better than nothing as it's only available in Chinese and poorly formatted. Apperantly, aligning all pills and axises is the first and critical step. It's very interesting that most of the joints are actucally 3D printed PLA, it is indeed very strong - enough to hold screws in place. Some of the 3D printed holes however, were delibarately made too small we had to mill them. Also a bit of WD40 helps pluging in. When fitting the Z motor, attention must be paid that the bed should remain close to the motor when screwing in, otherwise the axis can suffer from going down due to misalignment. It took us about 8 hours to build the frimework and fitting the motors in. 
+
+The hot bed is very typical, powered by a 12V source however, can also do with 24V. The connection does not use any solder but yellow tape. There is a thermal resistor under the board that senses the temperature of it which unfortanetly does not have a slot to slide in in the hot bed thus makes leveling hard in a later stage. 
+
+The motherboard is a ATMEGA2586 sanguino compatible running on Marlin 1.1.0-RC3. Typically, configuration.h file is the only bit you need to work on - the min and max of travelling, the language pack to use, turning features on/off. 
+
+The last step before printing is to level the hot bed. There is a black magic item to help! Proximity Sensor. As the inductive sensors only works with metals, you would need a capacitor proximity sensor. My mate Anton recommended LJC18A3-H-Z. Marlin does support it and the g code to call is G29. 
+
+We used 3M Scotch Blue Painter's tape for multi-surface #2090 to help with adhesion. We used 200degC on the printing head and 52-56degC on hot bed with PLA. Anton reported good result simply on a glass surface with 60 degC hot bed. In general a higher temperature will keep the PLA too soft and grabbing poorly onto the surface. 
+
+We used Simplify3D. It's straight forward to set up and it supports live USB control over the tool. The control panel can be found in 'tool' menu or simply ctrl+P. 
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<p>A mate of mine and I were working on a 3D printer in the past week. It's a Chinese rip-off of Ultimaker2+ and was carried in a baggage from Beijing. It's only about $300. </p>
+
+<p>The installation guide is a bit better than nothing as it's only available in Chinese and poorly formatted. Apperantly, aligning all pills and axises is the first and critical step. It's very interesting that most of the joints are actucally 3D printed PLA, it is indeed very strong - enough to hold screws in place. Some of the 3D printed holes however, were delibarately made too small we had to mill them. Also a bit of WD40 helps pluging in. When fitting the Z motor, attention must be paid that the bed should remain close to the motor when screwing in, otherwise the axis can suffer from going down due to misalignment. It took us about 8 hours to build the frimework and fitting the motors in. </p>
+
+<p>The hot bed is very typical, powered by a 12V source however, can also do with 24V. The connection does not use any solder but yellow tape. There is a thermal resistor under the board that senses the temperature of it which unfortanetly does not have a slot to slide in in the hot bed thus makes leveling hard in a later stage. </p>
+
+<p>The motherboard is a ATMEGA2586 sanguino compatible running on Marlin 1.1.0-RC3. Typically, configuration.h file is the only bit you need to work on - the min and max of travelling, the language pack to use, turning features on/off. </p>
+
+<p>The last step before printing is to level the hot bed. There is a black magic item to help! Proximity Sensor. As the inductive sensors only works with metals, you would need a capacitor proximity sensor. My mate Anton recommended LJC18A3-H-Z. Marlin does support it and the g code to call is G29. </p>
+
+<p>We used 3M Scotch Blue Painter's tape for multi-surface #2090 to help with adhesion. We used 200degC on the printing head and 52-56degC on hot bed with PLA. Anton reported good result simply on a glass surface with 60 degC hot bed. In general a higher temperature will keep the PLA too soft and grabbing poorly onto the surface. </p>
+
+<p>We used Simplify3D. It's straight forward to set up and it supports live USB control over the tool. The control panel can be found in 'tool' menu or simply ctrl+P. </p>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "20170225.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
