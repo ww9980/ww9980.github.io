@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="Keywords" content="blog"/>
+    <meta name="Description" content="blog"/>
+    <title>Simple</title>
+    <link rel="shortcut icon" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+</head>
+<body>
+<div class="main">
+    <div class="header">
+    	<ul id="pages">
+            <li><a href="/">home</a></li>
+            <li><a href="/#/tags">tags</a></li>
+            <li><a href="/#/archive">archive</a></li>
+    	</ul>
+    </div>
+	<div class="wrap-header">
+	<h1>
+    <a href="/" id="title"></a>
+	</h1>
+	</div>
+<div id="md" style="display: none;">
+<!-- markdown -->
+#UV5R and its family
+Any ham knows about UV5R, an amazingly low-cost handheld radio. It's avaialble on ebay or amazon for 17-22GBP. It actually has 7 generations, where the UK version and most US versions are the first gen. Equipped with 1800mAh, it can last a few days purely on listening mode or about 3 or 4 hours if you are constantly talking on air with a high power VHF channel. 
+
+Some may ask about the difference between UV5R  and its family. I played with UV5R, UV5R5, and GT3TP MK III. I'd say UV5R5 is basically a copy of UV5R with one less button and a flat display which is more vulnerable. GT3TP has a totally different battery pack and a different keypad which does not look as solid as the UV5Rs. GT3TP has more power which in theory should give you 26% more coverage, it also has a different antenna made by a third company. However I tried to install it on my UV5R and see the spectrum on an SDR, I could not tell a difference in its gain. 
+
+In short, if you want a solid quality handheld, UV5R is of your choice. It indeed does not look like a cheap Chinese sweat labour product. It is a piece of equipment that is designed to last for at least 10 years under various environment. 
+
+If you wish to get an even better bargain, I'd recommend UV5R 7th gen which comes with a huge battery pack, 8W of max transmit power and USB direct charging compatibility. It is only available in China at a price of around 200CNY (ca 20GBP). 
+
+#Long distance transmission tests in Soton
+
+DK, a mate of mine and I tested the max range in a city like Soton. I was holding a UV5R and his is UV5R5 which is basically the same. We use 145.350MHz with high power. We started walking away from the riverside park [50.931840, -1.376140], til we reach St Denys Road Bridge[50.924474, -1.379097] and the A27 Bridge[50.937654, -1.364594]. The distance is 1mil covering both park and residentials. 
+
+Later we carried another test where DK drives home while receives my signal. He had no problem at all all the way til he is home which is 1.1mil away. I start to suffer from noise when I go into my room or he gets into his. The path is full of houses. 
+
+So basically, you can expect UV5R to work over 1mil in a typical British city. 
+
+#A Yagi for a handheld
+
+<!-- markdown end -->
+</div>
+<div class="entry" id="main">
+<!-- content -->
+<h1 id="uv5randitsfamily">UV5R and its family</h1>
+
+<p>Any ham knows about UV5R, an amazingly low-cost handheld radio. It's avaialble on ebay or amazon for 17-22GBP. It actually has 7 generations, where the UK version and most US versions are the first gen. Equipped with 1800mAh, it can last a few days purely on listening mode or about 3 or 4 hours if you are constantly talking on air with a high power VHF channel. </p>
+
+<p>Some may ask about the difference between UV5R  and its family. I played with UV5R, UV5R5, and GT3TP MK III. I'd say UV5R5 is basically a copy of UV5R with one less button and a flat display which is more vulnerable. GT3TP has a totally different battery pack and a different keypad which does not look as solid as the UV5Rs. GT3TP has more power which in theory should give you 26% more coverage, it also has a different antenna made by a third company. However I tried to install it on my UV5R and see the spectrum on an SDR, I could not tell a difference in its gain. </p>
+
+<p>In short, if you want a solid quality handheld, UV5R is of your choice. It indeed does not look like a cheap Chinese sweat labour product. It is a piece of equipment that is designed to last for at least 10 years under various environment. </p>
+
+<p>If you wish to get an even better bargain, I'd recommend UV5R 7th gen which comes with a huge battery pack, 8W of max transmit power and USB direct charging compatibility. It is only available in China at a price of around 200CNY (ca 20GBP). </p>
+
+<h1 id="longdistancetransmissiontestsinsoton">Long distance transmission tests in Soton</h1>
+
+<p>DK, a mate of mine and I tested the max range in a city like Soton. I was holding a UV5R and his is UV5R5 which is basically the same. We use 145.350MHz with high power. We started walking away from the riverside park [50.931840, -1.376140], til we reach St Denys Road Bridge[50.924474, -1.379097] and the A27 Bridge[50.937654, -1.364594]. The distance is 1mil covering both park and residentials. </p>
+
+<p>Later we carried another test where DK drives home while receives my signal. He had no problem at all all the way til he is home which is 1.1mil away. I start to suffer from noise when I go into my room or he gets into his. The path is full of houses. </p>
+
+<p>So basically, you can expect UV5R to work over 1mil in a typical British city. </p>
+
+<h1 id="ayagiforahandheld">A Yagi for a handheld</h1>
+<!-- content end -->
+</div>
+<br>
+<br>
+    <div id="disqus_thread"></div>
+	<div class="footer">
+		<p>© Copyright 2014 by isnowfy, Designed by isnowfy</p>
+	</div>
+</div>
+<script src="main.js"></script>
+<script id="content" type="text/mustache">
+    <h1>{{title}}</h1>
+    <div class="tag">
+    {{date}}
+    {{#tags}}
+    <a href="/#/tag/{{name}}">#{{name}}</a>
+    {{/tags}}
+    </div>
+</script>
+<script id="pagesTemplate" type="text/mustache">
+    {{#pages}}
+    <li>
+        <a href="{{path}}">{{title}}</a>
+    </li>
+    {{/pages}}
+</script>
+<script>
+$(document).ready(function() {
+    $.ajax({
+        url: "main.json",
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            $("#title").html(data.name);
+            var pagesTemplate = Hogan.compile($("#pagesTemplate").html());
+            var pagesHtml = pagesTemplate.render({"pages": data.pages});
+            $("#pages").append(pagesHtml);
+            //path
+            var path = "UV5R.html";
+            //path end
+            var now = 0;
+            for (var i = 0; i < data.posts.length; ++i)
+                if (path == data.posts[i].path)
+                    now = i;
+            var post = data.posts[now];
+            var tmp = post.tags.split(" ");
+            var tags = [];
+            for (var i = 0; i < tmp.length; ++i)
+                if (tmp[i].length > 0)
+                    tags.push({"name": tmp[i]});
+            var contentTemplate = Hogan.compile($("#content").html());
+            var contentHtml = contentTemplate.render({"title": post.title, "tags": tags, "date": post.date});
+            $("#main").prepend(contentHtml);
+            if (data.disqus_shortname.length > 0) {
+                var disqus_shortname = data.disqus_shortname;
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            }
+        }
+    });
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ["\\(", "\\)"]], processEscapes: true}});
+</script>
+</body>
+</html>
